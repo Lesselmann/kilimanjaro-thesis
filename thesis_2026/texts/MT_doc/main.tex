@@ -1,0 +1,164 @@
+\documentclass[hidelinks, 11pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{helvet} % For Arial-like font
+\renewcommand{\familydefault}{\sfdefault} % Use sans-serif font as the default
+\usepackage[font={small, sf}]{caption} %%% Adjust caption font to match sans-serif
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{siunitx}
+\usepackage{booktabs,siunitx,array,threeparttable}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{glossaries} % for glossaries
+\usepackage{multirow}
+\usepackage{float}
+\usepackage[sort&compress,round,comma,authoryear]{natbib}
+\usepackage[a4paper]{geometry}
+\sisetup{group-minimum-digits=4}
+
+\newgeometry{
+    top=1in,
+    bottom=1in,
+    outer=1in,
+    inner=1in
+}
+\bibpunct[, ]{(}{)}{;}{a}{,}{,}
+\begin{document}
+\include{Titlepage}
+
+\section{Introduction}\label{sec:Einleitung}
+People regularly visit unfamiliar places to discover new cultures and landscapes, but above all to relax. The aesthetics of landscapes have great cultural value for human well-being and often determine where people choose to relax \citep{havinga_social_2021, TerryC}. In this context, landscape aesthetics refers to the perception and evaluation of landscapes, which is composed of visual impressions, as well as cultural and emotional experiences. Bourassa (1998) adds to this understanding by viewing landscapes as aesthetic entities in which natural and cultural elements together shape human perception and evaluation. Landscape aesthetics have a direct positive effect on human well-being by reducing stress and supporting both psychological and physiological recovery \citep{gobster_shared_2007}. For example, they encourage activities such as hiking and promote a more intense perception and appreciation of ecological relationships through learning and engagement with the environment (ibid.). \\
+Despite its great importance for human well-being, landscape aesthetics is difficult to measure, as it depends on both objective landscape features, subjective perceptions and emotional responses \citep{zhang_assessment_2022, tveit_key_2006, daniel_whither_2001}. Therefore, a reliable assessment requires the integration of both dimensions and the consideration of complex landscape attributes and their interrelationships, which requires new methodological approaches, such as data-based spatial modeling \citep{frank_assessment_2013,sahraoui_spatial_2016}. \\
+One way to spatially capture the subjective perception of landscape aesthetics is to use social media data, such as georeferenced photos that indirectly reflect aesthetic preferences \citep{cardoso_classifying_2022,langemeyer_mapping_2018,tieskens_aesthetic_2018}. This data makes it possible to analyze human responses to landscapes on a large scale, which is something that traditional surveys alone can only do to a limited extent, as the resulting data is limited in terms of time and space \citep{cardoso_classifying_2022, yoshimura_demand_2017, bragagnolo_modelling_2016}. In conjunction with machine learning and deep learning methods, complex relationships between environmental variables (e.g., land cover and topographic structure) and perceived landscape values can be modeled to predict spatial patterns of aesthetic quality \citep{schirpke_predicting_2013}. Against this backdrop, Mount Kilimanjaro, with its scenic diversity, cultural significance, and heavy tourist use, offers an ideal study area for analyzing how environmental factors and human perception interact and which landscape features are particularly effective aesthetically. \\
+In recent years, the recording and modeling of landscape aesthetics has increasingly shifted from traditional, expert- or survey-based approaches to data-driven methods. Earlier work used landscape metrics, viewshed analyses, and visual expert assessments to spatially capture and validate aesthetic quality e.g., \citep{frank_assessment_2013,schirpke_predicting_2013,lee_application_2019}. Geo-referenced social media data has opened up the possibility of analyzing aesthetic preferences on a large scale and continuously \citep{langemeyer_mapping_2018,tieskens_aesthetic_2018}.
+Recent studies increasingly combine this data with machine learning and deep learning methods to automatically classify visual content from photos or derive aesthetic ratings directly from image features and environmental variables \citep{cardoso_classifying_2022,gosal_landscape_2020,havinga_social_2021}. These approaches enable fine-grained modeling of aesthetic landscape values and reveal robust correlations between landscape cover, topography, accessibility, and perceived beauty. At the same time, many studies focus either on large-scale, continental analyses e.g., \citep{van_zanten_continental-scale_2016} or on heavily anthropogenically influenced landscapes in Europe, while ecologically and culturally heterogeneous mountainous areas of the Global South remain underrepresented.
+In summary, existing studies demonstrate the great potential of social media data and machine learning and deep learning methods for the spatial assessment of landscape aesthetics. However, there is currently no integrated analysis that (1) models aesthetic landscape values in an ecologically and culturally highly diverse mountainous region of the Global South and (2) systematically relates the resulting aesthetic patterns to environmental variables such as land cover, topographic features, visibility metrics, and indices like NDVI. It, particularly, remains unclear which landscape factors are significant determinants of perceived aesthetics in such contexts. This work closes this research gap using Mount Kilimanjaro as a case study by combining social media-based aesthetic values with machine learning-based spatial modeling and statistical analysis of landscape influencing factors.
+
+\section{Literature Review}\label{sec:Einleitung}
+% Required packages (add to your preamble if not already present):
+% \usepackage{natbib}
+% \usepackage{booktabs}
+
+\subsection{Deep Learning Approaches for Landscape Image Classification: From CNNs to Vision-Language Models}
+
+The automated classification of social media imagery for landscape and cultural ecosystem service (CES) assessment has evolved rapidly over the past decade. Early studies relied on commercial image recognition tools such as Google Vision and Clarifai, which offered limited customisability and were not designed for ecological classification tasks \citep{lingua_valuing_2022, winder_open-source_2022}. The emergence of freely available convolutional neural networks (CNNs) with transfer learning marked a turning point, enabling researchers to build domain-specific classifiers customized to landscape and CES contexts.
+
+\subsubsection{CNNs: ResNet}
+
+The most widely adopted architecture in this field has been the Residual Network (ResNet), introduced by \citet{he2016}, which addresses the vanishing gradient problem in deep networks through skip connections that allow gradients to flow across layers without degradation. Across the reviewed literature, ResNet variants (particularly ResNet-50 and ResNet-152) have been consistently applied to CES image classification with strong results.
+\\
+\citet{cardoso_classifying_2022} conducted one of the most methodologically rigorous comparisons, testing VGG16 and ResNet-152 with three different pretraining strategies (ImageNet, Places365, and training from scratch) for a two-level CES classification scheme applied to Flickr images from protected areas in Portugal and Spain. ResNet-152 pretrained on ImageNet emerged as the best-performing model, achieving 87\% accuracy at the binary level (natural vs.\ human-dominated imagery) and 77\% for a six-class CES classification, while training from scratch consistently underperformed across all metrics. This finding that transfer learning from large-scale datasets is essential and training from scratch is insufficient, has been replicated across all reviewed studies and represents a methodological baseline for the field.
+\\
+Building on this, \citet{lingua_valuing_2022} developed a four-stage hierarchical pipeline using ResNet-152 at each classification level, including a landscape type classifier (forest, mountain, water, snow, sky) pretrained on Places365 that achieved 91\% weighted accuracy. The hierarchical design (first filtering for relevance before classifying aesthetic content) is directly relevant to workflows that process heterogeneous social media datasets. Similarly, \citet{havinga_social_2021} used a Places365-pretrained ResNet-50 to extract scene class and image attribute scores from 9.8 million Flickr images across Great Britain, which were subsequently combined with environmental indicators in a random forest model to predict landscape scenicness at a 5$\times$5~km grid level. This study is particularly relevant because it directly connects deep learning-derived aesthetic scores with landscape-level environmental variables, the analytical relationship examined in the present thesis.
+\\
+More recent work has further validated and extended the ResNet approach. \citet{comalada_modelling_2025} achieved a macro F1 of 0.91 using ResNet-152 with ImageNet pretraining, the RangerAdaBelief optimiser and Mixup augmentation, applied to over 40{,}000 Flickr images of Iberian river landscapes. The highest CES classification accuracy reported in the literature at the time of writing. Crucially, this study also linked classified images to biophysical variables (naturalness, accessibility, Natura~2000 status) using XGBoost with SHAP interpretability, demonstrating that the gap between population-predicted and observed aesthetic CES scores is smallest in protected, high-naturalness areas. This finding directly supports an expected positive relationship between aesthetic perception and environmental quality indicators. Consistent ResNet performance across diverse contexts was further confirmed by \citet{you_mapping_2026} and \citet{xu_revealing_2025}, both achieving approximately 84--85\% accuracy with ResNet-50 variants for CES classification in Chinese urban and coastal landscapes respectively.
+
+\subsubsection{EfficientNet}
+
+While ResNet dominated the CES image classification literature between 2021 and 2023, \citet{chen_using_2025} provided the first evidence that EfficientNet-B3 \citep{tan2019} outperforms both ResNet-152 and VGG-16 for landscape image classification, achieving 92.1\% accuracy on a national-scale dataset of terrace landscape images from Weibo. EfficientNet achieves higher accuracy through compound scaling, which simultaneously increases network depth, width and input resolution in a principled ratio, making it more parameter-efficient than ResNet at equivalent or higher task performance (ibid.). This result positions EfficientNet-B3 as the current state-of-the-art supervised CNN for CES image tasks, though it has not yet been independently replicated across diverse non-Chinese or non-urban contexts. Importantly, like all supervised CNN approaches reviewed here, EfficientNet-B3 requires several thousand labelled training images and cannot generalise to categories not represented in the training set.
+
+\subsubsection{CLIP and Zero-Shot Vision-Language Models}
+
+A fundamentally different approach to image classification has emerged with the development of vision-language models (VLMs), most notably CLIP (Contrastive Language--Image Pretraining) introduced by \citet{radford_learning_2021}. Unlike CNNs trained on fixed label sets, CLIP learns a joint embedding space for images and natural language text by pretraining on hundreds of millions of image-text pairs from the web (ibid.). This enables \textit{zero-shot classification}. The model scores any image against arbitrary text prompts without requiring task-specific fine-tuning or labelled training data from the target domain (ibid.).
+\\
+\citet{liao_mapping_2025} provided the first large-scale application of CLIP to CES classification, mapping 12 CES flow categories from approximately 590{,}000 Flickr images across Florida using a hybrid pipeline (CLIP-BRF-ZS) that combines a binary random forest pre-filter trained on CLIP embeddings with zero-shot CLIP classification of retained images. The best-performing pipeline achieved 88\% overall accuracy and a macro F1 of 0.88, using only 120 labelled images for model development representing a label efficiency approximately 100 times greater than comparable CNN pipelines (cf.\ \citealt{cardoso_classifying_2022}: $\sim$8{,}500 labelled images; \citealt{lingua_valuing_2022}: $\sim$35{,}000 labelled images). For the landscape aesthetics class specifically, CLIP achieved an F1 of 0.85 using a descriptive prompt specifying natural, panoramic and unpopulated imagery \citet{liao_mapping_2025}. The study further demonstrated that prompt design is critical. For example mixed prompts consistently outperformed simple or purely detailed prompts alone.
+
+\subsubsection{Model Selection: ResNet vs.\ CLIP for the Present Study}
+
+The reviewed literature reveals a clear trade-off between supervised CNN approaches and zero-shot VLMs that is directly relevant to the classification task in this thesis. Table~\ref{tab:model_comparison} summarises the key performance metrics and data requirements across the reviewed studies.
+
+\begin{table}[ht]
+\centering
+\caption{Summary of deep learning model performance across reviewed studies for landscape and CES image classification.}
+\label{tab:model_comparison}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{llccp{4cm}}
+\toprule
+\textbf{Study} & \textbf{Model} & \textbf{Accuracy} & \textbf{Macro F1} & \textbf{Labels required} \\
+\midrule
+\citet{havinga_social_2021}  & ResNet-50 (Places365)      & --   & --   & none (no fine-tuning) \\
+\citet{cardoso_classifying_2022}  & ResNet-152 (ImageNet)      & 87\% & 0.87 & $\sim$8{,}500 \\
+\citet{lingua_valuing_2022}   & ResNet-152 (Places365)     & 85\% & 0.85 & $\sim$35{,}000 \\
+\citet{comalada_modelling_2025} & ResNet-152 (ImageNet)      & 91\% & 0.91 & $\sim$6{,}900 \\
+\citet{xu_revealing_2025}       & ResNet-50 (SimCLRv2)       & 85\% & 0.83 & 1{,}864 \\
+\citet{you_mapping_2026}      & ResNet-50 (ImageNet)       & 84\% & 0.81 & $\sim$7{,}350 \\
+\citet{chen_using_2025}     & EfficientNet-B3 (ImageNet) & 92\% & 0.92 & $\sim$2{,}720 \\
+\citet{liao_mapping_2025}     & CLIP / MobileCLIP-S1       & 88\% & 0.88 & \textbf{120} \\
+\bottomrule
+\end{tabular}
+\end{table}
+Supervised CNNs such as ResNet-152 and EfficientNet-B3 offer the highest absolute accuracy when sufficient labelled training data is available and the classification task is defined within a fixed label set. However, they require large annotated datasets, are sensitive to cross-regional transfer \citep[a 10--17\% accuracy drop was observed by][when applying a Portuguese-trained model to Spain]{cardoso_classifying_2022}, and cannot generalise to image content not represented during training.
+\\
+CLIP, by contrast, excels in contexts where labelled data is scarce, where target categories are defined semantically in natural language rather than as fixed class indices, and where the image dataset may contain content types not anticipated during classifier design. Characteristics that apply directly to the heterogeneous Flickr imagery from the Kilimanjaro region used in this study. The ability to formulate ecologically grounded prompts, including references to locally specific vegetation types such as \textit{Dendrosenecio} (giant groundsels) or afroalpine grasslands, enables meaningful landscape classification without requiring representative labelled examples of each class from the study area. Furthermore, the binary pre-filtering architecture demonstrated by \citet{liao_mapping_2025}, using a supervised filter to remove irrelevant images before applying zero shot classification, directly mirrors the preprocessing logic of the present pipeline and provides strong methodological precedent for a hybrid approach.
+
+\subsection{Environmental drivers}\label{sec:Sota}
+
+\section{Data and methods}\label{sec:Daten}
+The method used in this study comprises seven potentially sequential steps. First, georeferenced Flickr photos taken in the Kilimanjaro study area are downloaded using an application programming interface (API). These photos contain metadata such as the date they were taken and their geographical coordinates, which are crucial for subsequent spatial and temporal analysis.
+In the next step, the downloaded images are classified using deep learning models. This involves the use of convolutional neural networks (CNN) such as ResNet152 (residual neural network) and VGG16 (very deep convolutional network) as well as vision-language models (VLM) with zero-shot classification. The models are first trained with the Flickr images and then compared with each other based on their classification accuracy in order to identify the most suitable model for further analysis \citep{cardoso_classifying_2022}.
+Classification takes place in several stages. In the first step, the images are divided into the categories Human and Nature in order to separate photos with human infrastructure (e.g., buildings, roads, or other anthropogenic elements) from nature photos relevant to this work (ibid.). The remaining nature images are then further differentiated to identify landscape photos and image content that could potentially influence the perceived landscape aesthetics (ibid.).
+After completing the image classification and a random check of the classification results, the next step is to calculate a quantitative aesthetic value for each image. Since landscape aesthetics is a subjective concept, a scalable and comparable indicator is needed for this purpose. The aesthetic quality of the images is quantified using the pre-trained Neural Image Assessment Model (NIMA), which predicts not only a single mean value but also a distribution of human evaluation judgments \citep{talebi_nima_2018}. The model is based on a convolutional neural network architecture that has been trained on extensive, human-rated datasets (AVA) and enables perception-based, reference-free image quality assessment (ibid.). The expected aesthetic score is extracted from the predicted rating distribution and used as a continuous indicator of the perceived landscape aesthetics of each Flickr image \citep{havinga_social_2021}.
+Once this step is complete, a dataset is available that contains the aesthetic score, geographical coordinates, and date of capture for each photo. To create a spatially explicit landscape aesthetics map of Kilimanjaro, the aesthetic scores are aggregated onto a grid \citep{van_zanten_continental-scale_2016,figueroa-alfaro_evaluating_2017}. For each grid cell with a resolution of 50 × 50 pixels, the mean value of all photos taken within that cell is calculated. In addition, a separate raster map is created that shows the number of photos per grid cell in order to map the spatial distribution of the underlying social media data.
+In order to investigate which environmental variables potentially influence the modeled landscape aesthetics, additional spatially explicit environmental and landscape parameters are collected for the study area and converted to the same spatial resolution as the aesthetics grid data \citep{arriaza_assessing_2004,tenerelli_crowdsourcing_2016}. These include topographic variables such as elevation and slope, vegetation and land cover information (e.g., NDVI or land cover classes), hydrological features such as distance to rivers or water bodies, and accessibility indicators such as distance to roads or tourist routes.
+First, an exploratory correlation analysis is performed to identify bivariate relationships between the aggregated aesthetic landscape values and individual environmental variables \citep{arriaza_assessing_2004}. Spearman's rank correlation coefficient is used for this purpose, as both non-linear relationships and non-normally distributed data are to be expected. The correlation analysis is primarily used for exploratory investigation and to support the interpretation of the subsequent regression models, without implying causal relationships \citep{zuur_protocol_2010,dormann_collinearity_2013}.
+Building on this, multiple linear regression analysis is used to simultaneously model the influence of several environmental variables on aesthetic landscape values \citep{gosal_landscape_2020}. The aggregated aesthetic score per grid cell acts as the dependent variable, while the environmental variables are included in the model as independent predictors. To avoid multicollinearity between the predictors, variance inflation factors (VIF) are calculated (ibid.). The model quality is evaluated using common metrics such as the coefficient of determination (R²) and the root mean square error (RMSE) (ibid.).
+Since the relationship between environmental factors and human perception of landscape aesthetics is often non-linear, a Generalized Additive Model (GAM) is also applied \citep{xu2025}. GAMs enable flexible modeling of non-linear relationships using smooth functions (splines) of the predictors, while maintaining the interpretability of the individual effects \citep{wood_generalized_nodate}. The results of the linear regression are compared with those of the GAM to examine the extent to which non-linear effects contribute
+to a better explanation of the spatial patterns of landscape aesthetics.
+In the final step, the final regression model is used to predict aesthetic landscape values across the entire study area. In this way, areas with low Flickr photo density can also be included in the analysis. The resulting maps represent spatially explicit representations of modeled landscape aesthetics and enable an interpretation of the aesthetic quality of the landscape at Kilimanjaro in the context of non-material Nature's Contributions to People. In addition, the photo density map is used to identify potential distortions due to the uneven spatial distribution of social media data and to critically reflect on these in the discussion of results.
+\section{Possible questions that I want to answer}\label{sec:Possible questions that I want to answer}
+\subsection{Main Research Question}
+
+\begin{itemize}
+    \item How can landscape aesthetics in the Mount Kilimanjaro region be spatially modeled using social media--derived aesthetic indicators and environmental variables?
+\end{itemize}
+
+\subsection{Sub-questions}
+
+\begin{enumerate}
+    \item \textbf{Image Processing and Classification}
+    \begin{enumerate}
+        \item How reliably can deep learning models distinguish landscape-related nature images from other Flickr photos in the Kilimanjaro region?
+        \item How do different model architectures (e.g., CNNs and vision-language models) compare in their classification performance?
+    \end{enumerate}
+
+    \item \textbf{Quantification of Landscape Aesthetics}
+    \begin{enumerate}
+        \item How can perceived landscape aesthetics be quantified from georeferenced social media images using automated image assessment models?
+    \end{enumerate}
+
+    \item \textbf{Spatial Patterns of Aesthetic Values}
+    \begin{enumerate}
+        \item What are the spatial patterns of perceived landscape aesthetics across the Mount Kilimanjaro region based on aggregated Flickr image scores?
+    \end{enumerate}
+
+    \item \textbf{Environmental Drivers of Landscape Aesthetics}
+    \begin{enumerate}
+        \item What bivariate relationships exist between aesthetic scores and individual environmental variables (e.g., elevation, slope, NDVI, land cover, distance to water)?
+        \item How well can combinations of environmental variables explain the spatial variation in perceived landscape aesthetics using multiple linear regression?
+        \item Do non-linear modeling approaches (e.g., Generalized Additive Models) improve the explanation of aesthetic landscape patterns compared to linear models?
+    \end{enumerate}
+
+    \item \textbf{Spatial Prediction}
+    \begin{enumerate}
+        \item To what extent can environmental variables be used to predict landscape aesthetic values in areas with low or no social media photo density?
+    \end{enumerate}
+
+    \item \textbf{Influence of Social Media Data Distribution}
+    \begin{enumerate}
+        \item How does the spatial distribution of Flickr photos influence the modeled patterns of landscape aesthetics and their interpretation?
+    \end{enumerate}
+
+\end{enumerate}
+
+
+
+
+
+\clearpage
+
+\clearpage
+\bibliographystyle{abbrvnat}
+\bibliography{Masterthesis}
+\end{document}

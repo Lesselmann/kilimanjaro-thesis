@@ -1,0 +1,176 @@
+\documentclass[hidelinks, 11pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{helvet} % For Arial-like font
+\renewcommand{\familydefault}{\sfdefault} % Use sans-serif font as the default
+\usepackage[font={small, sf}]{caption} %%% Adjust caption font to match sans-serif
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{siunitx}
+\usepackage{booktabs,siunitx,array,threeparttable}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{glossaries} % for glossaries
+\usepackage{multirow}
+\usepackage{float}
+\usepackage[sort&compress,round,comma,authoryear]{natbib}
+\usepackage[a4paper]{geometry}
+\sisetup{group-minimum-digits=4}
+
+\newgeometry{
+    top=1in,
+    bottom=1in,
+    outer=1in,
+    inner=1in
+}
+\bibpunct[, ]{(}{)}{;}{a}{,}{,}
+\begin{document}
+\include{Titlepage}
+\section{Introduction}\label{sec:Sota}
+This document gives a scientifically overview of landscape indicators suitable for correlating with landscape aesthetic derived from deep learning classification of social media images. The indicator selection follows the conceptual framework of Ode, Tveit & Fry (2008) and Tveit, Ode & Fry (2006), which organises landscape visual character into nine theory-based concepts. For each indicator, the theoretical basis and key empirical findings from the literature are presented.
+
+\section{Conceptual Framework}\label{sec:CF}
+Ode et al. (2008) identified nine visual concepts characterising landscape visual character, each grounded in established theories of landscape preference and perception (Table 1)
+
+\begin{table}[ht]
+\centering
+\caption{Nine Visual Concepts and their Theoretical Roots (Ode et al., 2008)}
+\label{tab:concepts}
+\begin{tabular}{lll}
+\toprule
+\textbf{Concept} & \textbf{Theoretical Basis} & \textbf{Key Reference} \\
+\midrule
+Naturalness      & Biophilia Hypothesis; Restorative Environments Theory 
+                 & Kellert \& Wilson (1993); Kaplan \& Kaplan (1989); \\
+                 & & Ulrich (1979, 1984) \\
+\addlinespace
+Complexity       & Information Processing Theory 
+                 & Kaplan \& Kaplan (1982, 1989) \\
+\addlinespace
+Visual Scale     & Prospect-Refuge Theory 
+                 & Appleton (1975, 1996) \\
+\addlinespace
+Coherence        & Information Processing Theory 
+                 & Kaplan \& Kaplan (1989) \\
+\addlinespace
+Disturbance      & Biophilia Hypothesis 
+                 & Kellert \& Wilson (1993) \\
+\addlinespace
+Stewardship      & Aesthetics of Care 
+                 & Nassauer (1995, 1997) \\
+\addlinespace
+Imageability     & Spirit of Place / Topophilia 
+                 & Lynch (1960); Tuan (1974) \\
+\addlinespace
+Historicity      & Landscape Heritage 
+                 & Lowenthal (1979, 1985) \\
+\addlinespace
+Ephemera         & Restorative Environments 
+                 & Kaplan \& Kaplan (1989) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Landscape Indicators}\label{sec:LI}
+\subsection{Naturalness}\label{sec:Na}
+\subsubsection{Theoretical Background}
+Naturalness is the most consistently supported predictor of landscape aesthetic preference in the literature. Ode et al. (2008) anchor it in two complementary theories: the Biophilia Hypothesis (Kellert & Wilson 1993), which posits an innate human affinity with nature rooted in evolutionary history, and the Restorative Environments Theory (Kaplan & Kaplan 1989; Ulrich 1979, 1984), which holds that natural settings facilitate recovery from mental fatigue. Both frameworks predict that landscapes with higher proportions of natural, unmodified vegetation will be perceived as more aesthetically pleasing.
+
+\subsubsection{Key Empirical Findings}
+    Frank et al. 2013 validated a landscape metrics-based aesthetic 
+    assessment approach using SHDI, Shape Index, and Patch Density against 
+    subjective beauty ratings from 153 participants across nine landscape types 
+    in Saxony, Germany. Naturalness and landscape diversity were confirmed as 
+    primary assessment criteria. Van der Jagt et al. 2014 empirically confirmed that natural character 
+    is a significant positive predictor of scene attractiveness, while built 
+    character predicts scenic quality negatively. Arriaza et al. 2004 found that perceived visual quality increases 
+    with the degree of wilderness of the landscape, with naturalness consistently 
+    ranking among the strongest positive correlates. Ode et al. 2010 empirically tested three naturalness indicators 
+    (succession stage, number of woodland patches, edge shape index) through an 
+    online survey with 703 participants in seven languages, confirming their 
+    validity as visual indicators.
+\subsection{Water Presence and Proximity}\label{sec:WP}
+\subsubsection{Theoretical Backround}
+Water is embedded in multiple visual concepts in the Ode et al. (2008) framework, including Coherence (spatial correspondence between landform and water), Naturalness (proportion of water as indicator of natural character), and Imageability (water as a memorable, spectacular element). The theoretical basis extends to Appleton's (1975) Prospect-Refuge Theory: water bodies expand prospect by opening the view, enhancing the landscape's perceived depth and spaciousness.
+\subsubsection{Key Empirical Findings}
+White et al. (2010) demonstrated in a large-scale photo study that scenes containing aquatic elements (rivers, lakes, coastlines) consistently received higher preference, affect, and restorativeness ratings than comparable scenes without water. The effect held across both natural and built environments. Kaplan & Kaplan (1989) identified water as one of the most universally preferred landscape elements across cultures, attributing its positive effect to its role in facilitating prospect and providing fascination. Hauser et al. (2025), in a study of Austrian landscapes using Flickr data, found that water bodies and Natura 2000 areas significantly and positively influenced scenic beauty scores derived from social media. Arriaza et al. (2004) ranked water presence among the five strongest positive predictors of perceived visual quality in a multi-variable regression analysis.
+
+\subsection{Topographic Diversity / Relief Energy}\label{sec:TDRE}
+\subsubsection{Theoretical Background}
+Topography influences multiple visual concepts simultaneously in the Ode et al. (2008) framework: Visual Scale (depth and breadth of view, openness), Imageability (viewpoints, landmarks), and Complexity (diversity of landforms). The prospect dimension of Appleton's (1975) Prospect-Refuge Theory is strongly influenced by topography, as elevated terrain provides overview and visual dominance.
+\subsubsection{Key Empirical Findings}
+Schirpke et al. (2013) developed a GIS-based modelling approach for mountain landscapes and found that two principal components (shape complexity and landscape diversity) were positively related to perceived scenic beauty, explaining 72\% of variance (R² = 0.72). Topographic characteristics including slope and aspect were identified as essential for non-flat landscapes.
+Arriaza et al. (2004) found that the presence of mountains ranked positively among the predictors of perceived landscape quality.
+Frank et al. (2013) confirmed that diversity indices combining topographic and LULC information correlated directly with beauty ratings (r = 0.73).
+Schirpke et al. (2016) demonstrated that topographic complexity contributes significantly to the cultural ecosystem service of aesthetic value in Alpine regions.
+
+\subsection{Landscape Diversity and Spatial Complexity}\label{sec:LDSC}
+\subsubsection{Theoretical Background}
+Landscape diversity and spatial complexity correspond to the concept of Complexity in Ode et al. (2008), rooted in Kaplan & Kaplan's (1989) Information Processing Theory. According to this theory, landscape complexity provides content for the mind and sustains attention, which is essential for restorative experience. 
+\subsubsection{Key Empirical Findings}
+Frank et al. (2013) operationalised complexity using Shannon's Diversity Index (SHDI), Shape Index (SHAPE), and Patch Density (PD). Their combined metric correlated directly with participants' beauty ratings (r = 0.73). They note that a more uneven distribution of LULC types, higher patch size variation, and more complex patch shapes all significantly increased aesthetic values.
+Schirpke et al. (2013) reduced a set of 60 landscape metrics by PCA to 11 components; landscape diversity (including SDI and shape indices) was one of two components positively related to scenic beauty.
+Palmer (2004) found composition metrics (including diversity measures) to be better predictors of scenic beauty than configuration metrics alone.
+Dramstad et al. (2006) found that student preference ratings correlated directly and significantly with Shannon Diversity Index values for the mapped area (r = 0.58).
+
+\subsection{Visual Scale and Openness}\label{sec:VSO}
+\subsubsection{Theoretical Background}
+Visual Scale in the Ode et al. (2008) framework, defined as the perceptual experience of landscape rooms, visibility, and openness, is grounded in Appleton's (1975) Prospect-Refuge Theory. According to this evolutionary theory, humans are biologically predisposed to prefer landscapes offering both prospect (wide views, ability to survey the environment) and refuge (shelter, concealment). 
+\subsubsection{Key Empirical Findings}
+Ode \& Fry (2009) empirically tested percentage open land and landscape room size as photo-based indicators of visual scale and confirmed both as significant predictors of preference. Results demonstrated that visual scale is a robust driver of landscape preference across different groups.
+Kaplan \& Kaplan (1989) discuss prospect as one of the most consistent cross-cultural preference factors in environmental psychology, with open landscapes providing both legibility and the possibility of refuge from which to observe the environment safely.
+Clay \& Smidt (2004) and Hanyu (2000) further support the role of openness as a key aesthetic variable in diverse landscape contexts.
+
+\subsection{Disturbance / Anthropogenic Impact}\label{sec:DAI}
+\subsubsection{Theoretical Background}
+Disturbance in Ode et al. (2008) refers to the lack of contextual fit and coherence introduced by human-made elements that disrupt the visual character of the landscape. It is the conceptual counterpart to naturalness and coherence. The Biophilia Hypothesis (Kellert & Wilson 1993) predicts that visible human disturbance of natural systems reduces wellbeing and aesthetic pleasure. High disturbance is expected to produce low aesthetic scores.
+\subsubsection{Key Empirical Findings}
+Van der Jagt et al. (2014) confirmed that built character is a significant negative predictor of scenic quality across a large and varied image dataset of 1,600 photographs.
+Gulinck et al. (2001) demonstrated that disturbance indicators based on the proportion of land cover classified as visually disturbed show strong correlations with reduced preference ratings, and noted that local calibration of what constitutes disturbance is important.
+Arriaza et al. (2004) found that visible infrastructure (e.g., roads, built-up areas) consistently reduced perceived visual quality, ranking among the most negative predictors.
+
+\begin{table}[ht]
+\centering
+\caption{Overview of selected indicators with theoretical concept and key supporting literature.}
+\label{tab:indicators}
+\begin{tabular}{lll}
+\toprule
+\textbf{Indicator} & \textbf{Concept} & \textbf{Key Literature} \\
+\midrule
+\% Natural vegetation    & Naturalness                 & Kellert \& Wilson (1993); Kaplan \& Kaplan (1989); Frank et al. (2013) \\
+\addlinespace
+NDVI mean                & Naturalness                 & Ode et al. (2008); Arriaza et al. (2004) \\
+\addlinespace
+\% Water cover           & Coherence / Naturalness     & White et al. (2010); Kaplan \& Kaplan (1989); Hauser et al. (2025) \\
+\addlinespace
+Distance to waterbody    & Coherence / Imageability    & Arriaza et al. (2004); White et al. (2010) \\
+\addlinespace
+Relief energy            & Visual Scale / Complexity   & Schirpke et al. (2013); Arriaza et al. (2004) \\
+\addlinespace
+Mean slope               & Visual Scale                & Schirpke et al. (2013, 2016) \\
+\addlinespace
+Shannon Diversity (SHDI) & Complexity                  & Frank et al. (2013); Palmer (2004); McGarigal et al. (2002) \\
+\addlinespace
+Edge Density (ED)        & Complexity                  & Ode et al. (2008); Germino et al. (2001) \\
+\addlinespace
+Patch Density (PD)       & Complexity                  & Frank et al. (2013); McGarigal et al. (2002) \\
+\addlinespace
+\% Open land             & Visual Scale                & Appleton (1975); Ode \& Fry (2009) \\
+\addlinespace
+Viewshed size            & Visual Scale / Imageability & Ode et al. (2008); Palmer \& Lankhorst (1998) \\
+\addlinespace
+\% Built-up area         & Disturbance                 & Van der Jagt et al. (2014); Arriaza et al. (2004) \\
+\addlinespace
+Distance to road         & Disturbance                 & Gulinck et al. (2001); Arriaza et al. (2004) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\clearpage
+\bibliographystyle{abbrvnat}
+\bibliography{Masterthesis}
+\end{document}
+

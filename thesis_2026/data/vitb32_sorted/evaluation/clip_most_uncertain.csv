@@ -1,0 +1,11 @@
+file_name,true_label,pred_label,confidence
+image_3247.jpg,indoor,outdoor,0.1579777
+image_3996.jpg,indoor,indoor,0.16134383
+image_7426.jpg,indoor,indoor,0.16134383
+image_2514.jpg,indoor,indoor,0.1616858
+image_258.jpg,indoor,outdoor,0.16288796
+image_724.jpg,indoor,outdoor,0.16288796
+image_2486.jpg,indoor,outdoor,0.16289084
+image_6084.jpg,indoor,outdoor,0.16289084
+image_1848.jpg,indoor,outdoor,0.16367772
+image_5582.jpg,indoor,outdoor,0.16367772
