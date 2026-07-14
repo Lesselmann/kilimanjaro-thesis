@@ -19,3 +19,34 @@ thesis_2026/data/evaclip_sorted_manual_annotation/
 thesis_2026/data/test_images_evaluation_sorted_vit32_sorted/
 thesis_2026/data/vit14_eval_sorted/
 thesis_2026/data/weights/
+
+# Geodaten (Viewshed/Landscape-Metrics-Session) - zu gross fuer Git
+thesis_2026/data/landscape_indicators/
+thesis_2026/data/PUD_Analysis/*.gpkg
+*.tif
+*.tiff
+*.gpkg
+
+# R-spezifisch
+.Rhistory
+.RData
+.Rproj.user/
+
+# Neu benannte Daten-Ordner (Pipeline-Reorganisation) - selbes Muster wie alte Eintraege
+thesis_2026/data/Classification_Human_non_Human/
+thesis_2026/data/Classification_Individual_CoEco_Landscape/
+thesis_2026/data/Classification_Indoor_Outdoor/
+thesis_2026/data/All_images_deduplicated/
+thesis_2026/data/Annotation_Human_Non_Human/
+thesis_2026/data/Annotation_Individual_CoEco_Landscape/
+thesis_2026/data/Annotation_Indoor_Outdoor/
+thesis_2026/data/Model_Evaluation_Indoor_Outdoor_28062026/
+thesis_2026/data/Model_Evaluation_Individual_CoEco_Landscape_30062026/
+thesis_2026/data/Model_Evaluation_Human_Non_Human_28062026/
+thesis_2026/data/manual_deleted_images_outdoor_26062026/
+
+# Weitere Datenordner - nicht fuer Git
+thesis_2026/data/Duplicates/
+thesis_2026/data/LinearProbe_AllModels_Comparison_Human_Non_Human/
+thesis_2026/data/LinearProbe_AllModels_Comparison_IndividualCoEcoLandscape/
+thesis_2026/figures/
