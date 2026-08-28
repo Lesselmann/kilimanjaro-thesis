@@ -2,8 +2,7 @@
 # .gitignore - Master's Thesis 2026
 # GitHub kann keine grossen Dateien (Bilder, Raster, Geodaten,
 # Modellgewichte) sinnvoll versionieren. Alles Grosse bleibt
-# nur lokal; getrackt werden Code, kleine Ergebnis-CSVs, READMEs
-# und mother_table.csv.
+# nur lokal; getrackt werden Code und kleine Ergebnis-CSVs.
 # =============================================================
 
 # -------------------------------------------------------------
