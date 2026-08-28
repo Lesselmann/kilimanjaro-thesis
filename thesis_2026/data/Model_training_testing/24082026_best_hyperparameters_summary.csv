@@ -1,0 +1,5 @@
+"Response","Model","Params","RMSE","MAE","Pseudo_R2"
+"PUD","RandomForest","ntree=500, mtry=3, nodesize=1",0.311814231205366,0.157476246170983,0.11111688118629
+"PUD","XGBoost","max_depth=2, nrounds=100, learning_rate=0.05, subsample=0.7, colsample_bytree=0.7",0.315655241138368,0.134704573792116,0.0890830090431728
+"n_images","RandomForest","ntree=300, mtry=3, nodesize=1",30.234943342561,13.6399902534113,0.11685956523789
+"n_images","XGBoost","max_depth=2, nrounds=100, learning_rate=0.10, subsample=1.0, colsample_bytree=0.7",30.1963894662528,11.8070550487753,0.119110389944531

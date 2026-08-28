@@ -1,0 +1,319 @@
+\documentclass[hidelinks, 11pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{helvet} % For Arial-like font
+\renewcommand{\familydefault}{\sfdefault} % Use sans-serif font as the default
+\usepackage[font={small, sf}]{caption} %%% Adjust caption font to match sans-serif
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{siunitx}
+\usepackage{booktabs,siunitx,array,threeparttable}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{glossaries} % for glossaries
+\usepackage{multirow}
+\usepackage{float}
+\usepackage[sort&compress,round,comma,authoryear]{natbib}
+\usepackage[a4paper]{geometry}
+\sisetup{group-minimum-digits=4}
+
+\newgeometry{
+    top=1in,
+    bottom=1in,
+    outer=1in,
+    inner=1in
+}
+\bibpunct[, ]{(}{)}{;}{a}{,}{,}
+\begin{document}
+\include{Titlepage}
+
+
+\pagenumbering{roman}  
+\tableofcontents
+\newpage                
+
+\pagenumbering{arabic}  
+\setcounter{page}{1}
+\section{Introduction}\label{sec:Einleitung}
+Ensuring that people worldwide can continue to benefit from what nature offers for a good life remains a pressing challenge, for now and for the future \citep{Diaz2015,Diaz2018}. To capture these diverse benefits, IPBES introduced the concept of nature's contributions to people (NCP), defined as "all the contributions, both positive and negative, of living nature (diversity of organisms, ecosystems, and their associated ecological and evolutionary processes) to people's quality of life" \citep{Diaz2018}. There are three types of NCP: regulating contributions, for instance the indirect benefits people derive from soil organisms that sustain plant growth; material contributions, such as food, energy, or ornamental materials obtained from nature; and non-material contributions, which encompass the psychological and subjective aspects of people's quality of life, such as recreation, inspiration, and spiritual experiences (ibid.). One of these non-material NCP is the aesthetic enjoyment of nature \citep{Bruley2021}, the object of study of landscape aesthetics, the focus of this thesis.
+\\
+Landscape aesthetics generate substantial cultural value for human well-being, playing an important role in shaping where people choose to spend time outdoors and how they experience their surroundings \citep{havinga_social_2021}. Landscape aesthetics is commonly defined as "the enjoyment and pleasure felt through the observation of environmental scenery" \citep{tribot_integrating_2018}. This experience can be approached from two complementary angles: one that centers on a landscape's objective, physical properties capable of eliciting such a response, and another that focuses on how observers subjectively perceive and make sense of those properties \citep{tribot_integrating_2018}. This is because aesthetic experience represents a uniquely direct link between people and ecological processes, one that shifts depending on the spatial scale of the landscape itself and the scale at which humans are able to perceive it \citep{tribot_integrating_2018,gobster_shared_2007}. Engaging aesthetically with a landscape can benefit human well-being directly, for instance by lowering stress, and indirectly, by encouraging outdoor physical activity \citep{gobster_shared_2007}.
+\\
+Despite its importance, landscape aesthetics has proven difficult to assess systematically. The conceptual basis for translating visual quality into operational, comparable indicators remains comparatively underdeveloped relative to other environmental domains \citep{tveit_key_2006}, not least because judging a landscape's aesthetic quality inevitably combines two things at once: the physical makeup of the landscape itself, and the way an individual observer perceives and evaluates it \citep{daniel_whither_2001,zhang_assessment_2022,schirpke_predicting_2013}. The second, subjectivist view holds that this beauty is not inherent to the landscape itself but instead constructed through the observer's individual cultural, social, and psychological background \citep{lothian_landscape_1999}. Empirical assessment has traditionally relied on large-scale surveys of people's stated preferences and actual landscape use \citep{havinga_social_2021}. However, such surveys are costly and complex to carry out, which makes them rare, and even where available, they tend to capture only coarse-grained interactions with the landscape, missing the finer-grained detail needed to understand how and where people are actually experiencing aesthetic value (ibid.).
+\\
+Therefore, a reliable assessment requires the integration of both dimensions, the physical and the psychological, and the consideration of complex landscape attributes and their interrelationships, which requires new methodological approaches, such as data-based spatial modeling \citep{de_la_fuente_de_val_relationship_2006,sahraoui_spatial_2016}. One way to spatially capture the subjective perception of landscape aesthetics is to use social media data, such as georeferenced photos that indirectly reflect aesthetic preferences \citep{comalada_modelling_2025,langemeyer_mapping_2018,tieskens_aesthetic_2018,liao_mapping_2025}.  This data makes it possible to analyze human responses to landscapes on a large scale, which is something that traditional surveys alone can only do to a limited extent, as the resulting data is limited in terms of time and space \citep{cardoso_classifying_2022,yoshimura_demand_2017}. Social media data has increasingly been used to derive proxies for landscape aesthetic appreciation at scale \citep{havinga_social_2021, gosal_landscape_2020,despotovic_beautiful_2025}, including as part of broader multi-class cultural ecosystem service frameworks \citep{liao_mapping_2025}. Recent advances in vision-language models such as CLIP allow such proxies to be generated directly from image content through zero-shot classification, without the need for large labelled training sets \citep{liao_mapping_2025,radford_learning_2021}. Similar deep learning approaches based on convolutional neural networks have been applied to classify social media images into cultural ecosystem service categories, including aesthetic appreciation \citep{cardoso_classifying_2022}. Once derived, such proxies can be linked to spatially explicit environmental variables, such as land cover, topographic structure, and viewshed properties, using statistical modelling frameworks \citep{schirpke_predicting_2013, vaz_digital_2020}. 
+\\
+Selecting appropriate landscape indicators for such models requires a clear theoretical grounding, discussed in detail in Section~\ref{sec:sota} \citep{ode_capturing_2008,tribot_integrating_2018}. One such proxy is based on the number of unique user-days per grid cell, a measure of visitation intensity and, by extension, perceived attractiveness, referred to as Photo User Days (PUD) \citep{wood_using_2013}.
+\\
+While theoretical grounding of indicator selection, CLIP-based image classification, PUD-based proxy derivation, and the statistical linkage of aesthetic proxies to landscape indicators have each been explored, and some combined in parts \citep{liao_oneshot_2025,liao_mapping_2025,vaz_digital_2020}, no study today has integrated all of these components within a single modelling framework. Against this backdrop, Mount Kilimanjaro, with its scenic diversity, cultural significance, and heavy tourist use, offers an ideal study area for analyzing how environmental factors and human perception interact and which landscape features are particularly effective aesthetically. This thesis addresses this gap by combining CLIP-based image classification of georeferenced Flickr photographs with a PUD-based aesthetic proxy and spatial statistical modelling of landscape indicators in the Mount Kilimanjaro region. Specifically, it asks: Which landscape variables are significant predictors of perceived landscape aesthetics in the Mount Kilimanjaro region, modelled on the basis of georeferenced Flickr images and deep learning methods?
+\section{Literature Review}\label{sec:Einleitung}
+
+\subsection{Landscape Aesthetics: Concepts and Perception}\label{sec:LAConcepts}
+
+Landscape aesthetics can be understood as the pleasurable experience that comes from the view of visual features from a landscape \citep{tribot_integrating_2018}, composed of visual impressions as well as cultural and emotional experiences \citep{bourassa_toward_1988}. As a cultural ecosystem service it contributes directly to human well-being by reducing stress and supporting psychological and physiological recovery \citep{gobster_shared_2007}, and is increasingly recognised as a key, though difficult to quantify, dimension of the ecosystem services agenda \citep{daniel_contributions_2012}.
+\\
+Following the conceptual framework of \citep{tribot_integrating_2018}, landscape aesthetic experience can be understood as occurring between a \textit{transmitter} and a \textit{receiver}. The transmitter approach is linked to the intrinsic, biophysical characteristics of a landscape (its structure, composition, and ecological properties) that are capable of stimulating an aesthetic response (ibid.). The receiver approach, by contrast, centres on how humans perceive and interpret the landscape, encompassing the cognitive processes studied in neuro-aesthetics and psychology, the emotional interpretation of visual stimuli, and the sociological and cultural context in which this perception occurs (ibid.). These  dimensions are mutually reinforcing parts of an aesthetic process \citep{gobster_shared_2007,tribot_integrating_2018}.
+\\
+Because aesthetic perception depends on both objective landscape features and subjective, culturally mediated responses \citep{daniel_whither_2001,zhang_assessment_2022}, social-media-based approaches such as those introduced above \citep{tieskens_aesthetic_2018} treat the decision of a user to photograph, geotag, and upload a particular scene as an implicit indicator of perceived aesthetic value \citep{langemeyer_mapping_2018}. This shifts the empirical focus of landscape aesthetics research from the receiver (direct human perception, typically measured through surveys or photo-questionnaires) towards the transmitter side of the framework, since the landscape and image content themselves become the primary object of quantitative analysis.
+\\
+However, this shift also entails a limitation. The receiver's evaluation is no longer directly observed but only inferred from the location and frequency of uploads, meaning that motivations unrelated to aesthetic appreciation, like social events, personal memory, or the mere presence of tourist infrastructure that attracts visitors independently of landscape quality \citep{tieskens_aesthetic_2018}, cannot be ruled out. Extracting meaningful transmitter-side information from these images at scale therefore requires not only their spatial location but also an understanding of their visual content, that is, which landscape elements are actually depicted. Deep learning-based image classification provides a means to derive this content-level information systematically, without relying on costly manual annotation.
+
+\subsection{Deep Learning Approaches for Landscape Image Classification: From CNNs to Vision-Language Models}
+
+Over the last 15 years many different model architectures were used to classify social media images for landscape and cultural ecosystem service (CES) assessment automatically. It has evolved from early commercial tools such as Google Vision and Clarifai, which offered limited custoisability for ecological tasks \citep{lingua_valuing_2022,winder_open-source_2022}, to domain-specific classifiers built on convolutional neural networks (CNNs) with transfer learning, and most recently to vision-language models (VLMs).
+\\
+Firstly the most important and dominant CNN architecture for classifying social media images are Residual Networks (ResNet; \citealt{he_deep_2016}). Many different studies have used ResNet models, achieving accuracies in the 74–91\% range across diverse contexts and pretraining strategies (Table 1; \citealt{cardoso_classifying_2022,lingua_valuing_2022,comalada_modelling_2025,xu_revealing_2025,you_mapping_2026}). Secondly Cardoso et al. (2022) shows that the classification process had worked better with ImageNet pretraining than with training from scratch and cross-regional transfer incurred notable accuracy losses (10--17 percentage points when a Portuguese-trained model was applied to Spain). Finaly more recently, \citet{chen_using_2025} showed that EfficientNet-B3 \citep{tan_efficientnet_2019}, using compound scaling of network depth, width and resolution, outperforms both ResNet-152 and VGG-16 (92.1\% accuracy). Additionally all supervised CNN approaches share a key limitation. They require several thousand labelled training images dedicated to a fixed, study-specific category scheme, ranging from 1,778 annotated images in \citet{cardoso_classifying_2022} to 6,911 in \citet{comalada_modelling_2025} and 7,351 in \citet{you_mapping_2026}, and cannot classify categories outside this predefined set without re-annotation and re-training \citep{radford_learning_2021}.
+\\
+In contrast to ResNet departs CLIP \citep{radford_learning_2021} from this paradigm by learning a joint image-text embedding space from 400 million web-sourced pairs, enabling zero-shot classification against arbitrary text prompts without task-specific training data. \citet{liao_mapping_2025} provided the first large-scale CES application, classifying \textasciitilde590,000 Flickr images into 12 CES categories using a hybrid CLIP-based pipeline (88\% accuracy, macro F1 = 0.88) with only 120 labelled images, roughly two orders of magnitude fewer than comparable CNN pipelines (cf. \citealt{cardoso_classifying_2022}: \textasciitilde8,500; \citealt{lingua_valuing_2022}: \textasciitilde35,000). Specifically for the landscape aesthetics class, CLIP achieved F1 = 0.85, and prompt design proved critical, with class-specific mixed prompts consistently outperforming uniform prompt strategies \citep{liao_mapping_2025}.
+
+
+\subsubsection{Model Selection for This Study}
+Table 1 summarises performance across the reviewed studies. Supervised CNNs achieve the highest absolute accuracy when large labelled datasets are available for a fixed label set, but are costly to annotate and transfer poorly across regions. CLIP instead excels where labelled data is scarce and target categories are better expressed semantically than as fixed indices, conditions that match the heterogeneous, ecologically specific Flickr imagery from the Kilimanjaro region used here, including locally distinctive vegetation types such as \textit{Dendrosenecio} (giant groundsels) or afroalpine grasslands that can be captured through prompt design without representative labelled examples. \citeauthor{liao_mapping_2025}'s (\citeyear{liao_mapping_2025}) binary pre-filtering architecture, which removes irrelevant images before zero-shot classification, further provided direct methodological precedent for the hybrid pipeline adopted in this thesis.
+
+
+
+\subsection{Approaches to Operationalising Landscape Aesthetic Value}
+
+Translating the subjective construct of landscape aesthetics into a measurable proxy variable requires an operationalisation strategy \citep{daniel_whither_2001}. Two broad traditions can be distinguished. Firstly survey-based approaches and secondly social-media-based approaches.
+\\
+Survey-based studies typically combine GIS-derived landscape metrics with photo-based preference ratings. \citep{schirpke_predicting_2013} related viewshed-derived landscape metrics to survey-based scenic beauty scores across four Alpine sites, while \citep{frank_assessment_2013} validated a metrics-based aesthetic index against visual ratings from 153 participants, finding the strongest correspondence when photographs, rather than satellite images or land cover maps, were used as stimuli. Such approaches yield high reliability but are costly and spatially limited \citep{schirpke_predicting_2013}.
+\\
+Social media data offer a scalable alternative. Following this approach, the decision of a user to photograph, geotag, and upload a scene is treated as an implicit indicator of perceived aesthetic value \citep{langemeyer_mapping_2018}. Within this tradition, three operationalisation strategies can be identified. The first uses raw visitation intensity, typically Photo User Days (PUD), as a proxy for site attractiveness. \citep{wood_using_2013} validated this measure against empirical visitor counts at 836 sites worldwide, a finding corroborated by a meta-analysis of 355 correlations across 41 studies \citep{ghermandi_geolocated_2022}, though such counts do not distinguish scenic from unrelated content. A second strategy addresses this by manually classifying photograph content into cultural ecosystem service categories. \citep{vaz_digital_2020} modelled counts of categories such as "landscape and nature" or "cultural heritage" separately against distinct environmental predictors, while \citep{langemeyer_mapping_2018} distinguished landscape aesthetics capacity, the biophysical potential of a landscape, assessed via expert-weighted viewshed analysis, from aesthetics flow, the actual realisation of that potential as expressed through geolocated Flickr photographs, finding the two frequently mismatched in space. More recently, \citep{liao_oneshot_2025} automated this content-classification step using multimodal large language models, applying one-shot in-context learning to assign 3.42 million geotagged Flickr images to CES categories including landscape aesthetics, and aggregating classified images into county-level PUDs as a flow intensity measure, extending manual content coding toward a scalable, model-based classification approach. A third strategy uses platform-native engagement metrics rather than upload counts. \citep{despotovic_beautiful_2025} operationalised scenic beauty via the number of flickr "favourite" clicks, arguing this reflects aesthetic appreciation more directly than upload behaviour alone.
+\\
+These strategies mark a progression from undifferentiated visitation proxies toward operationalisations that separate visitation intensity, image content, and viewer engagement, and, in the capacity-flow framework, further distinguish a landscape's inherent potential from its realised appreciation. This distinction is directly relevant to the present study's decision of how content classification (Section 3.3) should inform the construction of the PUD-based aesthetic proxy (Section 3.2.1).
+
+
+\subsection{Landscape Variables as Predictors of}
+While the previous section addressed how landscape imagery can be classified to derive an aesthetic proxy, this section turns to the independent variables of the present study. The biophysical and structural landscape attributes used to predict this proxy. Indicator selection follows the typology of \citet{tveit_key_2006} and \citet{ode_capturing_2008}, who organise landscape visual character into nine theory-grounded concepts (Table \ref{tab:concepts}), complemented by the applied indicator sets and complementary "Scenic Attraction Model" proposed by \citet{frank_landscape_2017}, both of which link specific, quantifiable landscape metrics to landscape aesthetics as a cultural ecosystem service.
+\\
+Of the nine concepts identified by \citet{tveit_key_2006}, seven are operationalised in this thesis: Naturalness, Coherence, Complexity, Disturbance, Visual Scale, Imageability, and Ephemera. Stewardship and Historicity are not addressed, as the remote-sensing-based data sources available for this study (satellite imagery, digital elevation models) do not permit a meaningful assessment of management intensity or historical continuity, both of which typically require field-based or fine-grained cadastral data \citep{ode_capturing_2008}. In addition to these seven concepts, a subset of indicators (e.g. water presence, openness, colour and relief variation) draws on the complementary "Scenic Attraction Model" of \citet{frank_landscape_2017}, which, while not part of the original nine-concept typology, identifies further direct drivers of scenic attractiveness that are well suited to remote-sensing-based assessment.
+\\
+For Naturalness specifically, indicator selection draws additional support from \citet{ode_indicators_2009}, whose findings that succession stage, patch fragmentation, and edge shape complexity are significant drivers of landscape preference lend theoretical support to the general fragmentation- and complexity-related indicators used in this thesis (e.g. NumLandElements, ShapeIndex), even though these are operationalised here as landscape-wide metrics rather than woodland-specific ones as in the original study. Further support comes from \citet{tribot_integrating_2018}, who demonstrate a positive relationship between taxonomic, functional, and phylogenetic diversity and aesthetic value at the ecosystem level. While the present thesis does not incorporate taxonomic or phylogenetic diversity metrics directly, this evidence provides additional theoretical grounding for treating structural proxies of vegetation and land-cover heterogeneity (e.g. Shannon Diversity Index, colour diversity) as meaningful correlates of perceived naturalness and complexity.
+\\
+Naturalness, Coherence, Complexity, Visual Scale, and Disturbance are operationalised through multiple, empirically well-supported indicators (Table \ref{tab:indicators_strong}). Imageability and Ephemera are addressed through a smaller number of indicators for which direct empirical precedent in the aesthetic preference literature is comparatively limited (Table \ref{tab:indicators_weak}). Table \ref{tab:indicators_strong} illustrates commonly used operationalisations of each concept identified in the wider landscape aesthetics literature. The specific indicators adopted in this thesis, together with their data sources and computation methods, are detailed in Section 3.2.2. In total, 49 candidate indicators, including near- and middle-zone variants of viewshed-based metrics, were compiled for the collinearity screening pipeline described in Section 3.3.
+
+
+
+\subsection{Statistical Approaches for Modelling Landscape Aesthetic Value and Predictor Selection}\label{sec:ModelSOTA}
+
+Beyond the choice of aesthetic proxy (Section~2.2.5) and landscape predictors (Section~2.3), a further methodological decision concerns the statistical framework used to relate environmental predictors to the aesthetic response variable, and the procedure used to select among candidate predictors when many correlated variables are available.
+
+\subsubsection{Modelling Approaches in Landscape and Cultural Ecosystem Service Research}
+
+Studies linking landscape aesthetic or cultural value to biophysical and geospatial predictors have drawn on a range of established statistical and machine-learning frameworks, without converging on a single preferred approach for this application. Early work by \citet{schirpke_predicting_2013} reduced a large set of landscape metrics ($n = 60$) to a smaller number of components via Principal Component Analysis before relating them to perception-survey-based scenic beauty scores through stepwise linear regression. \citet{vaz_digital_2020} instead adopted a multimodel inference framework, fitting Poisson-distributed Generalized Linear Models separately for competing groups of predictors (environmental context, biophysical properties, points of leisure interest, and visual-sensory attributes) and combining them via Akaike-weighted model averaging. More recent studies have turned to tree-based machine-learning algorithms capable of capturing non-linear and interaction effects among predictors \citep{comalada_modelling_2025,havinga_social_2021}. \citet{havinga_social_2021} used Random Forests to predict crowdsourced scenicness ratings from a combination of deep-learning-derived Flickr image variables and environmental indicators, while \citet{comalada_modelling_2025} applied XGBoost to link CNN-classified cultural ecosystem service categories to biophysical predictors such as naturalness, accessibility, and protection status. Taken together, these studies illustrate a shift from classical regression-based frameworks, which emphasise interpretability and explicit hypothesis testing across predictor groups, towards flexible machine-learning approaches that prioritise predictive accuracy but offer more limited insight into the shape and direction of individual predictor--response relationships. This trade-off directly informs the choice of modelling framework for the present study, discussed in the following section.
+
+\subsubsection{Linearity, Non-Linearity, and Model Adequacy}
+
+The linearity assumption underlying GLMs is rarely tested explicitly in ecological research. A review of 162 recent studies found that fewer than 15\% reported a formal linearity test, even though non-linear techniques were applied in over a quarter of cases \citep{heit_generalized_2024}. In a comparative case study, GAMs substantially outperformed GLMs by AIC and revealed a threshold response of species abundance to landscape development that standard GLM diagnostics failed to detect (ebd.), suggesting that unexamined linearity assumptions risk obscuring genuine non-linear structure in predictor--response relationships.
+\\
+GAMs address this by replacing fixed linear terms with penalised smooth functions, allowing the functional form of each predictor to be estimated from the data rather than specified a priori \citep{wood_generalized_2017,pedersen_hierarchical_2019}. As a GLM is mathematically a special case of a GAM in which each smooth term reduces to a straight line (edf $\approx$ 1), a GAM does not preclude linear relationships but removes the need to assume them in advance. \citet{huang_generalized_2022} applied this logic to landscape-scale ecosystem service trade-offs in a topographically heterogeneous region, motivated by the expectation that such relationships are seldom linear.
+\\
+Crucially, the present research questions require not only accurate prediction but a clear picture of how each indicator shapes aesthetic value, relatable to the Ode et al. concept framework---an interpretive detail that tree-based methods provide only indirectly via post-hoc tools such as SHAP \citep{comalada_modelling_2025}. GAMs instead yield an explicit smooth function per predictor, making the shape of each relationship directly interpretable from the model itself \citep{wood_generalized_2017,pedersen_hierarchical_2019}. This combination of predictive flexibility and direct interpretability motivated the preference for GAM over Random Forest or XGBoost in the present study.
+
+\subsubsection{Predictor Selection}
+
+With large candidate predictor sets, most reviewed studies apply an explicit collinearity or dimensionality-reduction step before model fitting. \citet{vaz_digital_2020} restricted candidate predictors within each model to those with pairwise Spearman correlation below 0.6 and Variance Inflation 
+Factor (VIF) below 5. \citet{schirpke_predicting_2013} instead used PCA to condense 60 landscape metrics into a smaller set of orthogonal components prior to stepwise linear regression. \citet{dormann_collinearity_2013} provide simulation-based support for the simpler, pairwise approach: across a wide range of collinearity structures, selecting the more relevant variable from each correlated pair performed on par with markedly more complex methods such as ridge regression and latent-variable approaches, while retaining each predictor in its original, interpretable form. A comparable pairwise 
+screening step, following \citet{vaz_digital_2020}, was adopted for this thesis and is detailed in Section~3.3.
+
+\subsection{Research Gap and Synthesis}
+The reviewed literature demonstrates that each component required for this thesis is individually well established. Zero-shot vision-language models 
+enable label-efficient classification of heterogeneous landscape imagery (Section~2.2). Photo-User-Days provide a scalable, validated proxy for landscape aesthetic and recreational value (Section~2.3). In addition to that a broad, theory-grounded set of landscape indicators exists for operationalising the concepts of \citet{ode_capturing_2008} and 
+\citet{tveit_key_2006} (Section~2.4), and Generalized Additive Models offer an interpretable framework for testing non-linear predictor-response relationships while retaining statistical inference on individual effects (Section~2.5).
+\\
+To the best of our knowledge, no existing study models landscape aesthetics using this specific combination of methods, and none of the reviewed combined approaches addresses an ecologically and culturally heterogeneous mountain region of the Global South. Existing combined approaches either rely on CNN-based classifiers with substantial labelling requirements \citep{havinga_social_2021, comalada_modelling_2025}, adopt a predictor framework not grounded in landscape-aesthetic theory \citep{vaz_digital_2020}, operationalize a comparably small number of aesthetic concepts with few indicators retained per concept after reduction \citep{tenerelli_spatial_2017}, or apply models (GLM, Random Forest, XGBoost) that either impose linearity or, even where predictor importance is statistically assessed \citep{comalada_modelling_2025}, do not support inference on the shape or direction of individual predictor–response relationships. This thesis closes this gap by combining zero-shot CLIP-based classification, a Photo-User-Day aesthetic proxy, and a comprehensive, literature-grounded landscape indicator set within a GAM framework, applied to Mount Kilimanjaro as a case study.
+
+
+\section{Data and Methods}\label{sec:Data and Methods}
+\subsection{Research Area}
+
+\subsection{Base Data}
+\subsubsection{Flickr-Images}
+For this study we are using Flickr-Images. Flickr is an online platform where people can upload, share and manage their images. Flickr was selected as the data source for this study due to its high usage among tourists and hikers, the availability of precise geotagging, and its established use in comparable landscape perception studies. As Mount Kilimanjaro is a popular tourist destination, a substantial number of geotagged photographs are publicly available, making it a suitable case for investigating landscape aesthetics through crowdsourced imagery.
+\\
+The Flickr image dataset used in this study comprises 12{,}333 geotagged photographs collected via the Flickr API within a bounding box covering the Mount Kilimanjaro region (37.006091, -3.422038, 37.737682, -2.864474).
+\\
+For each image, a metadata table provided all information required for the subsequent analysis, including a unique photo identifier (\texttt{Photo\_ID}), the owner of each post (\texttt{owner}), the geographic coordinates of each 
+photo (\texttt{latitude}, \texttt{longitude}), the corresponding location accuracy level (\texttt{accuracy}), and the URL required to retrieve the original image (\texttt{url\_o}).
+
+
+\subsubsection{Geospatial Base Data}
+Six geospatial base datasets underpin the derivation of the landscape indicators presented in this section. Elevation was represented by two complementary digital elevation models. The Copernicus DEM GLO-30 (Copernicus DEM; \citep{esa_copernicus_2024}) is a 30\,m resolution digital surface model (DSM) derived from TanDEM-X radar interferometry, representing the reflective surface of the terrain including vegetation canopy and built structures. It was used wherever vegetation-induced visual obstruction is relevant to the analysis, namely for the viewshed computation (Section~\ref{sec:Viewshed}), since forest canopy genuinely blocks sightlines and should not be removed from the terrain model used for visibility analysis. The FABDEM dataset \citep{hawker_fabdem_2022}, a bare-earth derivative of the Copernicus DEM produced via machine learning to remove vegetation and building height, was used at the same 30\,m resolution wherever terrain morphology needed to be assessed independently of vegetation structure, namely for observer height correction within the viewshed computation and for the relief diversity indicator (Section~\ref{sec:LandscapeMetrics}). Unlike all other base datasets, which were accessed and exported directly through Google Earth Engine \citep{gorelick_google_2017} in the target projection, FABDEM was instead downloaded separately via the \texttt{fabdem} Python package and subsequently reprojected to EPSG:32737. Separating the DSM and the bare-earth product avoids conflating terrain complexity (a Complexity-concept indicator) with vegetation structure (a Naturalness-concept indicator) through a shared underlying data source.
+\\
+Land cover was obtained from ESA WorldCover 10\,m v200 (2021) \citep{zanaga_esa_2022}, a global land cover product derived from Sentinel-1 and Sentinel-2 imagery, comprising 11 thematic classes (tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, and moss/lichen). ESA WorldCover served as the categorical basis for all landscape-metrics-based indicators (Section~\ref{sec:LandscapeMetrics}), including diversity, patch structure, water presence, and disturbance-related indicators, and additionally provided the land cover input for the visible-composition indicators derived by overlaying the viewshed output with land cover classification (Section~\ref{sec:VisibleComposition}).
+\\
+Vegetation structure was additionally represented by the ETH Global Canopy Height 2020 product \citep{lang_highresolution_2023}, a 10\,m resolution global map of canopy top height for the reference year 2020, derived by fusing sparse GEDI spaceborne LiDAR footprints with Sentinel-2 imagery through a probabilistic deep learning model.
+\\
+Optical satellite imagery was obtained from Sentinel-2 Level-2A Surface Reflectance (10\,m resolution for the visible and near-infrared bands B2/Blue, B3/Green, B4/Red, B8/NIR; 20\,m resolution for the shortwave-infrared band B11/SWIR), accessed via Google Earth Engine and used as the basis for the vegetation, snow-cover, and colour-diversity indicators described in Section~\ref{sec:Indicators}.
+\\
+Leaf Area Index (LAI) was obtained from the MODIS MCD15A3H Version 6.1 product \citep{myneni_mcd15a3h_2021}, a combined Terra/Aqua Level 4 product providing 4-day composite LAI estimates at 500\,m resolution, accompanied by a per-pixel quality layer (\texttt{FparLai\_QC}) indicating retrieval reliability. It served as the basis for the LAI-based indicators of vegetation density and vegetation variability (Section~\ref{sec:Indicators}).
+\\
+All datasets were clipped to the study area's bounding box (36.87--37.88\textdegree{}E, 3.56--2.73\textdegree{}S, extended to accommodate the full 373-cell grid plus an approximately 15\,km buffer for the maximum viewshed search radius) and reprojected to UTM Zone 37S (EPSG:32737) prior to indicator computation, ensuring metre-based distance and area calculations across all subsequent analyses.
+
+\paragraph{Landscape Indicators}
+
+From the geospatial base data described above, 50 candidate landscape indicators were derived across the 373-cell study grid, listed in full in Table~\ref{tab:indicators}. Indicators operationalize seven of the nine visual concepts proposed by \citet{tveit_key_2006} and \citet{ode_capturing_2008} (Naturalness, Coherence, Complexity, Disturbance, Visual Scale, Imageability, and Ephemera). Several indicators are computed separately for near and middle distance zones, following \citet{schirpke_predicting_2013}, or restricted to the visually observable area through a viewshed overlay (\texttt{visible\_}-prefixed indicators), following \citet{tenerelli_spatial_2017}. Full formulas, parameter choices, and evidence-strength classification for each indicator are provided in Appendix~\ref{app:indicators}. The resulting 50-indicator candidate set forms the input to the collinearity screening procedure described in Section~\ref{sec:Screening}, which reduces this set to the final predictors entering the Tweedie GAM.
+
+\subsection{Image Classification}
+
+\subsubsection{Models}
+
+\paragraph{CLIP}
+In this study, CLIP (Contrastive Language-Image Pre-training) \citep{radford_learning_2021} was used as the foundational vision-language model. CLIP is a multimodal model that connects images and texts in a shared embedding space, developed by OpenAI and trained on 400 million image-text pairs (ibid.). The model consists of two separate encoders. One the one hand an image encoder (based on either a ResNet or a Vision Transformer architecture) and on the other hand a text encoder (based on a Transformer architecture) (ibid.).
+\\
+During pre-training, CLIP processes a batch of $N$ image-text pairs simultaneously \citep{radford_learning_2021}. For each image, the model computes the similarity to all $N$ texts in the batch, and vice versa for each text the similarity to all $N$ images (ibid.). This results in two loss functions. Firstly the image-to-text, where the model learns to identify the correct text for each image, and secondly the text-to-image, where the model learns to identify the correct image for each text (ibid.). Both losses are averaged, forming a symmetric cross-entropy loss that enables CLIP to learn the relationship between images and texts in both directions simultaneously (ibid.). Formally this means, that the $N$ actually corresponding pairs are pushed to become maximally similar in the embedding space, while the remaining $N^2 - N$ incorrect combinations are pushed to become maximally dissimilar (ibid.).
+\\
+Prior to similarity computation, all image and text embeddings are L2-normalised, reducing each embedding vector to a unit vector with a length of 1 \citep{radford_learning_2021}. 
+
+\paragraph{CLIP Model Variants}
+To identify the most suitable backbone for the image classification pipeline, four CLIP variants were systematically evaluated, following the multi-model comparison approach of \citet{liao_mapping_2025}. The selected variants represent a deliberate diversity in image encoder architecture, model size, and computational efficiency. From the lightweight MobileCLIP-S1, optimised for resource-constrained inference, to the large-scale EVA01-CLIP-g/14 with over one billion parameters. This range allows for a systematic assessment of the trade-off between classification performance and computational cost. All variants share the same contrastive pre-training objective and text encoder architecture described above, and were used with their publicly available pre-trained weights, with model parameters kept frozen throughout the entire study. An overview of the four variants is provided in Table~5.
+
+\paragraph{Classification Levels}
+The image classification pipeline consists of three sequential levels, each filtering the dataset for the subsequent step. Only images classified into the target category at each level are passed to the next.
+
+\textbf{Level 0 -- Indoor/Outdoor:} Images are classified as either indoor (depicting enclosed spaces such as rooms, buildings, or man-made interiors) or outdoor (depicting open-air environments). Only outdoor images are retained for further analysis, as the study focuses on landscape aesthetics in natural settings.
+
+\textbf{Level I -- Human/Non-Human:} Outdoor images are classified as either human (where one or more persons are the clear primary subject of the image) or non-human (where no person or only incidental, non-dominant human figures are present). Only non-human images are retained, as images dominated by people are not considered representative of landscape aesthetic perception.
+
+\textbf{Level II -- Individual/Community-Ecosystem/Landscape:} Non-human outdoor images are classified into three categories:
+\begin{itemize}
+\item \textbf{Individual:} Close-up photographs focusing on a single animal, plant, or object as the clear main subject
+\item \textbf{Community/Ecosystem:} Photographs showing multiple organisms, people, buildings, vehicles, or man-made structures, without forming a wide scenic landscape view
+\item \textbf{Landscape:} Wide-open photographs of natural scenery, often with a visible horizon, showing terrain, vegetation, or sky at an intermediate or far range, without any single subject or man-made structure dominating the frame
+\end{itemize}
+Images classified as landscape and community/ecosystem are retained for the subsequent aesthetic assessment, as these most directly capture the visual experience of natural landscapes that forms the basis of the Photo-User-Days proxy for landscape aesthetic value.
+
+\paragraph{Zero-Shot Classification}
+In zero-shot classification, each target class is formulated as a natural language prompt \citep{radford_learning_2021}. The image embedding by CLIP's pre-trained image encoder is then compared to the text embeddings of all class prompts via cosine similarity (ibid.). The class whose text embedding shows the highest cosine similarity to the image embedding is assigned as the final prediction (ibid.). This approach requires no task-specific training data, as the classification decision is based entirely on the semantic alignment between image and text representations learned during pre-training (ibid.). Zero-shot classification was firstly applied at Level 0 (Indoor/Outdoor). 
+
+\paragraph{Prompts}
+The performance of zero-shot CLIP classifiers is known to be sensitive to the exact wording of the class prompts \citep{yong_prompt_2023, malla_enhancing_2025, liao_mapping_2025}. To identify the most effective prompt formulation for each classification level, three prompt variants were systematically evaluated \citep{ liao_mapping_2025}:
+\begin{itemize}
+\item \textbf{Simple prompts:} Short, generic descriptions of each class (e.g. ``a photo of a landscape'')
+\item \textbf{Detailed prompts:} Longer, more specific descriptions explicitly targeting the visual characteristics of each class (e.g. ``a wide-open shot of nature, often with a visible horizon'')
+\item \textbf{Mixed prompts:} A class-specific combination of the best-performing prompt variant per class, selected based on the highest per-class F1-score on the development set
+\end{itemize}
+Prompt selection followed a stratified Dev/Test holdout split, implemented separately per class to preserve equal class proportions across both subsets, following the stratification principle for accuracy estimation
+described by \citet{kohavi_study_1995}, implemented via scikit-learn \citep{pedregosa_scikit-learn_2011}. An accurated, class-balanced evaluation dataset was divided into a development set (35\%) and a held-out test set (65\%). On the development set, the prompt variant yielding the highest per-class F1-score was identified for each class independently. The resulting Mixed prompt set was then evaluated on the test set, with Macro-averaged F1-score (Macro-F1) as the primary performance metric. Macro-F1 was chosen over accuracy as it weights each class equally regardless of class imbalance, making it more suitable for the unbalanced
+class distributions encountered in social media imagery
+\citep{liao_mapping_2025, sokolova_systematic_2009}.
+
+\paragraph{Linear Probing}
+While zero-shot classification offers a label-efficient approach to image classification \citep{liao_mapping_2025}, it implicitly relies on the
+assumption that natural language prompts can adequately capture the visual characteristics of each target class. Prior work has shown that zero-shot CLIP performance varies considerably across fine-grained classification tasks, performing strongly on some (e.g., Stanford Cars, Food101) while underperforming on others (e.g., Flowers102, FGVCAircraft) \citep{radford_learning_2021}, and that visually or semantically overlapping categories can reduce the
+inter-class separability achievable through text prompts alone \citep{liao_mapping_2025}. In such cases, zero-shot performance may be systematically limited.
+\\
+In this study, zero-shot classification at Level I (Human/Non-Human) revealed a systematic false-positive bias. Images containing small or distant human figures in landscape scenes were consistently misclassified
+as human across all four tested CLIP variants (Cohen's $\kappa$ = 0.374--0.642) \citep{cohen_coefficient_1960}, a distinction that proved difficult to capture through prompt engineering alone. To address this limitation, linear probing was employed as a supervised adaptation strategy \citep{radford_learning_2021}.
+\\
+In linear probing, the CLIP image encoder is kept fully frozen and used exclusively as a feature extractor \citep{radford_learning_2021}. A logistic regression classifier is trained on top of the resulting
+L2-normalised image embeddings, using a small set of labelled training examples. This approach preserves the general-purpose representational capacity of the pre-trained CLIP features while adapting the decision boundary to the specific classification task (ibid.). As no modifications are made to the CLIP model parameters, linear probing does not constitute fine-tuning of the pre-trained model (ibid.).
+\\
+The labelled training data for the linear probe consisted of the annotated gold standard sample ($n = 298$ for Level I; $n = 297$ for Level II). Due to the limited sample size, model performance was estimated using stratified 5-fold cross-validation (\texttt{StratifiedKFold}, \texttt{shuffle=True}, \texttt{random\_state=42}) rather than a single train/test split, ensuring that each sample was used for testing exactly once across the five folds while maintaining the class distribution in each fold. The final classifier was trained on the full annotated dataset and applied to the complete image collection. Linear probing was applied at both Level I and Level II, where zero-shot classification showed systematic weaknesses identified through gold standard validation. The detailed results are reported in Sections~3.3.3 and~3.3.4 respectively.
+
+\paragraph{Evaluation Strategy}
+The classification pipeline follows a consistent three-stage evaluation strategy at each level. First, a curated, class-balanced dataset is used for model and prompt selection under controlled conditions, providing an efficient basis for identifying the best-performing model-prompt combination without requiring large-scale manual annotation. Second, a randomly drawn gold standard sample is independently annotated by multiple human raters, and inter-annotator agreement is computed to establish the reliability of the resulting labels \citep{artstein_survey_2008}. This gold standard is then used to validate model performance under realistic data conditions. Where zero-shot classification reveals systematic limitations in the gold standard evaluation, a linear probe is trained on the gold standard annotations as a supervised adaptation strategy \citep{radford_learning_2021}. This sequential approach ensures that methodological decisions at each level are grounded in empirical evidence rather than assumptions about model performance.
+
+\subsubsection{Level 0: Indoor/Outdoor Classification}
+\paragraph{Model and Prompt Selection}
+Four CLIP variants were evaluated on a curated, class-balanced development dataset following a stratified Dev/Test-split (35\%/65\%). On the development set, Simple prompts consistently outperformed Detailed and Hybrid variants for the majority of models, and the resulting optimal per-class prompt set coincided with the Simple configuration for three of the four models (CLIP ViT-B/32, CLIP ViT-L/14, MobileCLIP-S1); only EVA01-CLIP-g/14 favoured the Detailed configuration for both classes. On this internal Test-Set, CLIP ViT-L/14 and MobileCLIP-S1 achieved the highest Macro F1-scores (0.927 each), followed by EVA01-CLIP-g/14 (0.888) and CLIP ViT-B/32 (0.847) (Table~6). As this internal Test-Set is drawn from the same pool as the Dev set, these results were treated as preliminary and used only to determine each model's optimal prompt configuration; final model selection was based on evaluation against an independently annotated gold standard, reported
+below.
+
+\paragraph{Gold Standard Annotation and Validation}
+A random sample of 300 images was drawn from the Flickr dataset and independently annotated by two annotators. Inter-annotator agreement was measured using Cohen's $\kappa$ \citep{cohen_coefficient_1960}, which corrects for chance agreement and is widely used in annotation quality assessment \citep{artstein_survey_2008,cardoso_classifying_2022}. Agreement was high (Cohen's $\kappa$ = 0.813, raw agreement = 98.0\%, disagreements = 6). A gold standard was derived from the annotations to serve as the
+reference for model evaluation.
+\\
+All four CLIP variants, each with its respective optimal prompt configuration from the development-set evaluation, were subsequently evaluated against this gold standard. MobileCLIP-S1 achieved the strongest
+agreement (accuracy = 98.7\%, Cohen's $\kappa$ = 0.868), followed by CLIP ViT-B/32 (accuracy = 97.3\%, Cohen's $\kappa$ = 0.701), CLIP ViT-L/14 (accuracy = 96.0\%, Cohen's $\kappa$ = 0.604), and EVA01-CLIP-g/14
+(accuracy = 95.3\%, Cohen's $\kappa$ = 0.564). Notably, CLIP ViT-L/14 — which had matched MobileCLIP-S1 on the internal Test-Set — performed markedly worse against the gold standard, confirming that the internal Dev/Test evaluation alone would not have reliably identified the best-performing model. Given its strongest agreement with the gold standard and its substantially lower computational cost ($\sim$13M vs
+$\sim$307M parameters), MobileCLIP-S1 with the Simple prompt configuration was selected as the final model for Level 0.
+\\
+The confusion matrix for MobileCLIP-S1 revealed that all 282 true outdoor images were correctly classified, while 4 of 18 true indoor images were misclassified as outdoor (Recall$_{\mathrm{indoor}}$ = 0.78). Given the
+strong overall performance and the negligible proportion of indoor images in the Kilimanjaro dataset, no further adaptation of the classification method was deemed necessary for Level 0. The final classification was applied to the full dataset of 8,820 images, yielding 8,219 outdoor images retained for subsequent classification levels.
+
+
+\subsubsection{Level I: Human/Non-Human Classification and Linear Probing}
+
+
+\paragraph{Model and Prompt Selection}
+Four CLIP variants were evaluated on a curated, class-balanced dataset (200 images per class) using the same stratified Dev/Test-split approach as Level 0. On the development set, MobileCLIP-S1 with Detailed prompts achieved the highest Macro F1-score (0.928), followed by EVA01-CLIP-g/14 with Detailed prompts (0.871) and CLIP ViT-L/14 with Detailed prompts (0.785). On the held-out test set, MobileCLIP-S1 achieved the highest overall performance (Accuracy = 91.9\%, Macro F1 = 0.919), followed by EVA01-CLIP-g/14 (Macro F1 = 0.904), CLIP ViT-L/14 (Macro F1 = 0.873), and CLIP ViT-B/32 (Macro F1 = 0.735) (Table~6). As this internal Test-Set is drawn from the same pool as the Dev set, these results were treated as preliminary and used only to determine each model's optimal prompt configuration; final model selection was based on evaluation against an independently annotated gold standard, reported
+below.
+
+
+\paragraph{Gold Standard Annotation and Validation}
+
+\paragraph{Gold Standard Annotation and Validation}
+A random sample of 298 images was drawn from the outdoor-classified dataset and independently annotated by two annotators. Inter-annotator agreement was measured using Cohen's $\kappa$, yielding substantial but imperfect agreement ($\kappa$ = 0.75, raw agreement = 89.9\%, disagreements = 30, Table~7), reflecting the inherent difficulty of the human/non-human distinction even for human annotators. A gold standard was derived from the annotations.
+\\
+Zero-shot evaluation of all four CLIP variants against the gold standard revealed a systematic false-positive bias affecting small or distant human figures in landscape scenes. Three of the four variants showed pronounced disagreement, with Cohen's $\kappa$ ranging from 0.374 (CLIP ViT-L/14) to 0.525 (EVA01-CLIP-g/14) and disagreement rates between 23.2\% and 29.2\%.
+CLIP ViT-B/32 achieved comparatively higher zero-shot agreement ($\kappa$ = 0.642, disagreement rate = 14.1\%), though its disagreements were concentrated at the same boundary cases. This systematic limitation, which proved resistant to prompt engineering across all four variants, motivated the adoption of linear probing as a supervised adaptation strategy
+\citep{radford_learning_2021}.
+
+\paragraph{Linear Probe Training and Evaluation}
+
+A linear probe was trained on the frozen CLIP image embeddings of all four model variants, using the 298-image gold standard as labelled training data. Model performance was estimated via stratified 5-fold cross-validation. All four linear probes substantially outperformed their zero-shot counterparts (Table~8). CLIP ViT-L/14 achieved the highest overall performance (AUC = 0.991 $\pm$ 0.007, Accuracy = 0.943, Precision$_{\mathrm{human}}$ = 0.857, Recall$_{\mathrm{human}}$ = 0.978), with false positives reduced from 87 (zero-shot) to 15.
+\\
+Notably, CLIP ViT-L/14, which showed the weakest zero-shot performance among the four variants on both the curated evaluation dataset (Macro F1 = 0.873) and the gold standard ($\kappa$ = 0.374), achieved the highest
+linear probe performance (AUC = 0.991), effectively inverting its zero-shot ranking relative to the other three variants. Absolute differences in linear probe AUC across the four models were nonetheless small (0.981--0.991), with overlapping standard deviations, precluding strong claims of statistical superiority. CLIP ViT-L/14 was therefore selected as the final model for Level I, based on its highest-ranked linear probe performance and the substantial reduction in false positives (from 59 to 15) and false negatives (from 28 to 2) it achieved relative to zero-shot classification. The linear probe was applied to all 8,219 outdoor images, yielding 5,240 non-human images retained for Level II.
+
+\subsubsection{Level II: Individual/Community-Ecosystem/Landscape Classification and Linear Probing}
+
+\paragraph{Model and Prompt Selection}
+Four CLIP variants were evaluated on a curated dataset of 100 images per class (300 total) using a stratified Dev/Test-split (35\%/65\%). On the development set, MobileCLIP-S1 with Mixed prompts achieved the highest Macro F1-score (0.787), outperforming EVA01-CLIP-g/14 with Detailed prompts (0.740), CLIP ViT-B/32 with Detailed prompts (0.739), and CLIP ViT-L/14 with Mixed prompts (0.697). On the held-out test set, MobileCLIP-S1 retained the best overall performance (Accuracy = 81.0\%, Macro F1 = 0.806), followed by EVA01-CLIP-g/14 (Macro F1 = 0.781), CLIP ViT-B/32 (Macro F1 = 0.767), and CLIP ViT-L/14 (Macro F1 = 0.592) (Table~6).
+
+\paragraph{Gold Standard Annotation and Validation}
+A random sample of 297 images was drawn from the non-human-classified dataset and independently annotated by three annotators (NB, LE, and MED). Inter-annotator agreement was measured using pairwise Cohen's $\kappa$ and Fleiss' $\kappa$ \citep{fleiss_measuring_1971} for agreement across all three annotators simultaneously, as recommended for multi-rater annotation settings. Pairwise Cohen's $\kappa$ revealed high agreement between NB and LE ($\kappa$ = 0.939), while MED showed systematically lower agreement with both NB ($\kappa$ = 0.467) and LE ($\kappa$ = 0.472), predominantly at the boundary between landscape and community ecosystem. Overall Fleiss' $\kappa$ was 0.588, indicating moderate agreement across all three annotators, with disagreements occurring in 95 of 297 cases (Table~7).
+\\
+Zero-shot evaluation of all four variants against the gold standard showed MobileCLIP-S1 as the strongest classifier (Accuracy = 85.5\%, Cohen's $\kappa$ = 0.678, disagreements = 43), followed by CLIP ViT-B/32 ($\kappa$ = 0.620), CLIP ViT-L/14 ($\kappa$ = 0.502), and EVA01-CLIP-g/14 ($\kappa$ = 0.384, disagreements = 105). Given the moderate performance across all variants, linear probing was adopted for Level II following the same rationale as Level I.
+
+\paragraph{Linear Probe Training and Evaluation}
+Linear probes were trained on the frozen embeddings of all four CLIP variants using the 297-image gold standard and evaluated via stratified 5-fold cross-validation. All linear probes improved upon their zero-shot counterparts. MobileCLIP-S1 achieved the highest Macro F1-score (0.819, AUC OvR = 0.957 $\pm$ 0.019), with particularly strong performance on the landscape class (F1 = 0.922) and weaker performance on community ecosystem (F1 = 0.693), reflecting the inherent ambiguity of this class as identified during annotation. In contrast to Level I, MobileCLIP-S1 maintained its superiority across both zero-shot and linear probe evaluation at Level II, confirming its suitability as the final model (Table~8). The linear probe was applied to all 5,240 non-human images, yielding 3,422 landscape-classified images and 1,301 comunity/ecosystem-classified images for the subsequent aesthetic assessment.
+
+\subsubsection{Photo-user-days PUD}
+Since CES cannot be measured directly, it is a subjective, mental construct rather than a physical quantity, many studies use proxies to quantify them \citep{wood_using_2013,ghermandi_geolocated_2022,liao_mapping_2025}. Where people take pictures, and where they upload them, is considered an indicator of actual use and appreciation of a place
+\citep{wood_using_2013,ghermandi_geolocated_2022}. Among the metrics used to operationalise this behavioural signal, the photo-user-day (PUD) has
+been established as a more robust alternative to a simple count of images, as it is less sensitive to the disproportionate contribution of a small number of highly active users \citep{wood_using_2013}. Following \citet{wood_using_2013}, a PUD counts a unique user who uploaded at least one photograph at a given location on a given day.
+\\
+For this study, PUD was computed from the subset of Flickr images
+classified as \textit{landscape} through the hierarchical classification
+pipeline described in Section~X.X, spanning the period 2004--2020.
+Following \citet{liao_mapping_2025}, these daily PUD counts were then
+aggregated into an average annual PUD ($\overline{PUD}_{yr}$) per grid
+cell $i$ by averaging yearly PUD totals across all years $T$ covered by
+the dataset:
+
+\[
+\overline{PUD}_{yr}(i) = \frac{1}{T}\sum_{t=1}^{T} PUD_t(i)
+\]
+
+where $PUD_t(i)$ denotes the total number of unique users who uploaded at least one landscape-classified, geotagged photograph in grid cell $i$
+during year $t$, and $T = 17$ (2004--2020). This averaged, grid-cell-level metric, $\overline{PUD}_{yr}$, serves as the primary response variable (\texttt{avg\_annual\_PUD}) throughout the subsequent modelling.
+
+\subsection{Modeling landscape aesthetic}
+\subsubsection{Colinearity screening}
+
+Prior to model fitting, all candidate landscape predictors were screened
+for multicollinearity in a two-stage procedure, following established
+recommendations for ecological data \citep{zuur2010,dormann2012},
+applied independently of model family or response variable.
+\\
+In the first stage, pairwise Spearman rank correlations were computed
+across all predictor pairs. Iteratively, the pair with the highest
+absolute correlation was identified; if it exceeded a threshold of
+$|\rho| \geq 0.6$ \citep{vaz_digital_2020}, the variable with the higher mean
+absolute correlation across the remaining predictor set was removed, as
+it was judged to carry more redundant information overall. This step was
+repeated until no remaining pair exceeded the threshold.
+\\
+In the second stage, the surviving predictors were screened using the
+Variance Inflation Factor (VIF; calculated with the \texttt{car} package, \citealp{fox2018}), computed iteratively from a linear model regressing a representative response variable (average annual photo-user-days, \texttt{avg\_annual\_PUD}) on the full remaining predictor set, following the sequential-removal procedure described by \citet{zuur2010}. Because VIF quantifies collinearity among predictors and does not depend algebraically on the response, the resulting VIF values and predictor ranking are unaffected by the specific choice of response variable; the same screened predictor set was therefore applied uniformly across all response categories in the subsequent analyses. At each iteration, the predictor with the highest VIF was removed if it exceeded a threshold of 5 \citep{vaz_digital_2020}, and the model was refit; this was repeated until all remaining predictors had a VIF below 5.
+\\
+A small number of grid cells had missing values for a subset of predictors. Missing values were handled using pairwise-complete observations for the correlation step and listwise deletion for the VIF regressions; given the low overall missingness, sample size varied only marginally (by at most eleven observations) across screening steps.
+
+\clearpage
+
+\clearpage
+\bibliographystyle{abbrvnat}
+\bibliography{MT}
+\end{document}

@@ -1,52 +1,144 @@
-thesis_2026/data/all_images_sorted/
-thesis_2026/data/all_images_sorted_indoor_outdoor/
-thesis_2026/data/manual_sample_images/
-*.keras
-*.h5
-*.pt
-*.pth
-*.zip
-*.tar
-thesis_2026/data/All_images/
+# =============================================================
+# .gitignore - Master's Thesis 2026
+# GitHub kann keine grossen Dateien (Bilder, Raster, Geodaten,
+# Modellgewichte) sinnvoll versionieren. Alles Grosse bleibt
+# nur lokal; getrackt werden Code, kleine Ergebnis-CSVs, READMEs
+# und mother_table.csv.
+# =============================================================
+
+# -------------------------------------------------------------
+# Bild-Dateien (nie in Git - egal wo)
+# -------------------------------------------------------------
 *.jpg
 *.jpeg
 *.png
 *.JPG
 *.JPEG
 *.PNG
+*.gif
+*.bmp
+*.webp
+
+# -------------------------------------------------------------
+# Modellgewichte / Checkpoints / Archive
+# -------------------------------------------------------------
+*.keras
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+
+# -------------------------------------------------------------
+# Raster- und Geodaten (zu gross fuer Git)
+# -------------------------------------------------------------
+*.tif
+*.tiff
+*.tif.ovr
+*.tif.aux.xml
+*.vrt
+*.nc
+*.hdf
+*.jp2
+*.ecw
+*.img
+*.asc
+*.grd
+*.gri
+*.gpkg
+# Shapefile inkl. aller Seitendateien
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.qpj
+*.qix
+*.sbn
+*.sbx
+
+# -------------------------------------------------------------
+# R-spezifisch
+# -------------------------------------------------------------
+.Rhistory
+.RData
+.Rdata
+.Rproj.user/
+*.rds
+*.Rds
+*.RDS
+# ... aber die kleine Screening-Ergebnisdatei behalten wir:
+!thesis_2026/data/Colinearity_screening/results/screening_results.rds
+
+# -------------------------------------------------------------
+# Grosse Bild-/Sortier-Ordner der Klassifikations-Pipeline
+# -------------------------------------------------------------
+thesis_2026/data/All_images/
+thesis_2026/data/All_images_deduplicated/
+thesis_2026/data/all_images_sorted/
 thesis_2026/data/all_images_sorted_indoor_outdoor/
+thesis_2026/data/manual_sample_images/
+thesis_2026/data/manual_deleted_images_outdoor_26062026/
 thesis_2026/data/evaclip_sorted_manual_annotation/
 thesis_2026/data/test_images_evaluation_sorted_vit32_sorted/
 thesis_2026/data/vit14_eval_sorted/
-thesis_2026/data/weights/
+thesis_2026/data/Duplicates/
 
-# Geodaten (Viewshed/Landscape-Metrics-Session) - zu gross fuer Git
-thesis_2026/data/landscape_indicators/
-thesis_2026/data/PUD_Analysis/*.gpkg
-*.tif
-*.tiff
-*.gpkg
-
-# R-spezifisch
-.Rhistory
-.RData
-.Rproj.user/
-
-# Neu benannte Daten-Ordner (Pipeline-Reorganisation) - selbes Muster wie alte Eintraege
+# Klassifikations-Ergebnisordner (tausende sortierte Bildkopien)
+thesis_2026/data/Classification_Indoor_Outdoor/
 thesis_2026/data/Classification_Human_non_Human/
 thesis_2026/data/Classification_Individual_CoEco_Landscape/
-thesis_2026/data/Classification_Indoor_Outdoor/
-thesis_2026/data/All_images_deduplicated/
+
+# Annotations-/Gold-Standard-Ordner (Bild-Samples)
+thesis_2026/data/Annotation_Indoor_Outdoor/
 thesis_2026/data/Annotation_Human_Non_Human/
 thesis_2026/data/Annotation_Individual_CoEco_Landscape/
-thesis_2026/data/Annotation_Indoor_Outdoor/
-thesis_2026/data/Model_Evaluation_Indoor_Outdoor_28062026/
-thesis_2026/data/Model_Evaluation_Individual_CoEco_Landscape_30062026/
-thesis_2026/data/Model_Evaluation_Human_Non_Human_28062026/
-thesis_2026/data/manual_deleted_images_outdoor_26062026/
 
-# Weitere Datenordner - nicht fuer Git
-thesis_2026/data/Duplicates/
+# Modell-Evaluations-Ordner (Bild-Samples + Splits)
+thesis_2026/data/Model_Evaluation_Indoor_Outdoor_28062026/
+thesis_2026/data/Model_Evaluation_Human_Non_Human_28062026/
+thesis_2026/data/Model_Evaluation_Individual_CoEco_Landscape_30062026/
+
+# Linear-Probe-Artefakte (Embeddings .npy + Modelle .joblib)
 thesis_2026/data/LinearProbe_AllModels_Comparison_Human_Non_Human/
 thesis_2026/data/LinearProbe_AllModels_Comparison_IndividualCoEcoLandscape/
+
+# Modellgewichte
+thesis_2026/data/weights/
+thesis_2026/data/Weights/
+
+# -------------------------------------------------------------
+# Landscape-Indicator-Session: Raster, DEMs, Shapes, GEE-Exporte,
+# Zwischentabellen -> mehrere GB, nur lokal
+# -------------------------------------------------------------
+thesis_2026/data/landscape_indicators/
+thesis_2026/data/Landscape_indicators/
+thesis_2026/data/PUD_Analysis/*.gpkg
+thesis_2026/code/Landscape_Indicators/files/files/.RData
+thesis_2026/code/Landscape_Indicators/files/files/.Rhistory
+
+# -------------------------------------------------------------
+# Figures (werden separat gehalten, nicht in Git)
+# -------------------------------------------------------------
 thesis_2026/figures/
+
+# -------------------------------------------------------------
+# Lokale, maschinen-spezifische Editor-/Tool-Einstellungen
+# -------------------------------------------------------------
+**/settings.local.json
+
+# -------------------------------------------------------------
+# OS / Editor
+# -------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+*.swp
+.ipynb_checkpoints/
+.Rproj.user/

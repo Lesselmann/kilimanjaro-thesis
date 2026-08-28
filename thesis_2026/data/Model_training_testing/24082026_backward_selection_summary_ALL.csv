@@ -1,0 +1,7 @@
+"Response","Model","N_Predictors","Predictors"
+"PUD","LM",7,"visible_area_middle_km2; ReliefDiversity; NDSI; visible_naturalness_middle; VerticalStructuralHeterogeneity; ColorDiversity; visible_ColorDiversity"
+"PUD","GLM",11,"visible_area_middle_km2; dist_sd_middle_m; ShapeIndex; ReliefDiversity; NDVI_var; visible_naturalness_middle; VerticalStructuralHeterogeneity; LAI_var; DistanceToWater_km; ColorDiversity; visible_ColorDiversity"
+"PUD","GAM",12,"visible_area_middle_km2; dist_sd_middle_m; ForestEcotoneDensity; ReliefDiversity; NDSI; NDVI_var; visible_naturalness_middle; visible_water_middle; VerticalStructuralHeterogeneity; ContagionIndex; ColorDiversity; ColorDiversity_var"
+"n_images","LM",6,"visible_area_middle_km2; ReliefDiversity; NDSI; VerticalStructuralHeterogeneity; LAI_var; ColorDiversity"
+"n_images","GLM_NB",10,"dist_sd_near_m; visible_area_middle_km2; ReliefDiversity; NDSI; NDVI_var; VerticalStructuralHeterogeneity; DistanceToWater_km; ContagionIndex; ColorDiversity; visible_ColorDiversity"
+"n_images","GAM_NB",13,"visible_area_middle_km2; ForestEcotoneDensity; ReliefDiversity; NDSI; NDVI_var; visible_naturalness_middle; visible_water_middle; VerticalStructuralHeterogeneity; LAI_var; DistanceToWater_km; ContagionIndex; ColorDiversity; ColorDiversity_var"
