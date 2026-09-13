@@ -1,0 +1,4 @@
+"Model","N_Predictors","Predictors"
+"LM",5,"ReliefDiversity; visible_water_near; VerticalStructuralHeterogeneity; ColorDiversity; visible_NDSI_mean"
+"GLM_Gamma",9,"visible_area_middle_km2; ShapeIndex; ReliefDiversity; NDSI; NDVI_var; VerticalStructuralHeterogeneity; ColorDiversity; visible_NDSI_mean; visible_ColorDiversity"
+"GAM_Gamma",12,"dist_sd_near_m; visible_area_middle_km2; ShapeIndex; ForestEcotoneDensity; ReliefDiversity; NDSI; NDVI_var; visible_water_near; VerticalStructuralHeterogeneity; ColorDiversity; ColorDiversity_var; visible_NDSI_mean"

@@ -1,0 +1,1356 @@
+\documentclass[hidelinks, 11pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{helvet} % For Arial-like font
+\renewcommand{\familydefault}{\sfdefault} % Use sans-serif font as the default
+\usepackage[font={small, sf}]{caption} %%% Adjust caption font to match sans-serif
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{siunitx}
+\usepackage{booktabs,siunitx,array,threeparttable}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{glossaries} % for glossaries
+\usepackage{multirow}
+\usepackage{float}
+\usepackage[sort&compress,round,comma,authoryear]{natbib}
+\usepackage[a4paper]{geometry}
+\usepackage{longtable}
+\usepackage{booktabs}
+\sisetup{group-minimum-digits=4}
+
+\newgeometry{
+    top=1in,
+    bottom=1in,
+    outer=1in,
+    inner=1in
+}
+\bibpunct[, ]{(}{)}{;}{a}{,}{,}
+\begin{document}
+\include{Titlepage}
+
+
+\pagenumbering{roman}  
+\tableofcontents
+\newpage                
+
+\pagenumbering{arabic}  
+\setcounter{page}{1}
+\section{Introduction}\label{sec:Einleitung}
+Ensuring that people worldwide can continue to benefit from what nature offers for a good life remains a pressing challenge, for now and for the future \citep{Diaz2015,Diaz2018}. To capture these diverse benefits, IPBES introduced the concept of nature's contributions to people (NCP), defined as "all the contributions, both positive and negative, of living nature (diversity of organisms, ecosystems, and their associated ecological and evolutionary processes) to people's quality of life" \citep{Diaz2018}. There are three types of NCP: regulating contributions, for instance the indirect benefits people derive from soil organisms that sustain plant growth; material contributions, such as food, energy, or ornamental materials obtained from nature; and non-material contributions, which encompass the psychological and subjective aspects of people's quality of life, such as recreation, inspiration, and spiritual experiences (ibid.). One of these non-material NCP is the aesthetic enjoyment of nature \citep{Bruley2021}, the object of study of landscape aesthetics, the focus of this thesis.
+\\
+Landscape aesthetics generate substantial cultural value for human well-being, playing an important role in shaping where people choose to spend time outdoors and how they experience their surroundings \citep{havinga_social_2021}. Landscape aesthetics is commonly defined as "the enjoyment and pleasure felt through the observation of environmental scenery" \citep{tribot_integrating_2018}. This experience can be approached from two complementary angles: one that centers on a landscape's objective, physical properties capable of eliciting such a response, and another that focuses on how observers subjectively perceive and make sense of those properties \citep{tribot_integrating_2018}. This is because aesthetic experience represents a uniquely direct link between people and ecological processes, one that shifts depending on the spatial scale of the landscape itself and the scale at which humans are able to perceive it \citep{tribot_integrating_2018,gobster_shared_2007}. Engaging aesthetically with a landscape can benefit human well-being directly, for instance by lowering stress, and indirectly, by encouraging outdoor physical activity \citep{gobster_shared_2007}.
+\\
+Despite its importance, landscape aesthetics has proven difficult to assess systematically. The conceptual basis for translating visual quality into operational, comparable indicators remains comparatively underdeveloped relative to other environmental domains \citep{tveit_key_2006}, not least because judging a landscape's aesthetic quality inevitably combines two things at once: the physical makeup of the landscape itself, and the way an individual observer perceives and evaluates it \citep{daniel_whither_2001,zhang_assessment_2022,schirpke_predicting_2013}. The second, subjectivist view holds that this beauty is not inherent to the landscape itself but instead constructed through the observer's individual cultural, social, and psychological background \citep{lothian_landscape_1999}. Empirical assessment has traditionally relied on large-scale surveys of people's stated preferences and actual landscape use \citep{havinga_social_2021}. However, such surveys are costly and complex to carry out, which makes them rare, and even where available, they tend to capture only coarse-grained interactions with the landscape, missing the finer-grained detail needed to understand how and where people are actually experiencing aesthetic value (ibid.).
+\\
+Therefore, a reliable assessment requires the integration of both dimensions, the physical and the psychological, and the consideration of complex landscape attributes and their interrelationships, which requires new methodological approaches, such as data-based spatial modeling \citep{de_la_fuente_de_val_relationship_2006,sahraoui_spatial_2016}. One way to spatially capture the subjective perception of landscape aesthetics is to use social media data, such as georeferenced photos that indirectly reflect aesthetic preferences \citep{comalada_modelling_2025,langemeyer_mapping_2018,tieskens_aesthetic_2018,liao_mapping_2025}.  This data makes it possible to analyze human responses to landscapes on a large scale, which is something that traditional surveys alone can only do to a limited extent, as the resulting data is limited in terms of time and space \citep{cardoso_classifying_2022,yoshimura_demand_2017}. Social media data has increasingly been used to derive proxies for landscape aesthetic appreciation at scale \citep{havinga_social_2021, gosal_landscape_2020,despotovic_beautiful_2025}, including as part of broader multi-class cultural ecosystem service frameworks \citep{liao_mapping_2025}. Recent advances in vision-language models such as CLIP allow such proxies to be generated directly from image content through zero-shot classification, without the need for large labelled training sets \citep{liao_mapping_2025,radford_learning_2021}. Similar deep learning approaches based on convolutional neural networks have been applied to classify social media images into cultural ecosystem service categories, including aesthetic appreciation \citep{cardoso_classifying_2022}. Once derived, such proxies can be linked to spatially explicit environmental variables, such as land cover, topographic structure, and viewshed properties, using statistical modelling frameworks \citep{schirpke_predicting_2013, vaz_digital_2020}. 
+\\
+Selecting appropriate landscape indicators for such models requires a clear theoretical grounding, discussed in detail in Section~\ref{sec:sota} \citep{ode_capturing_2008,tribot_integrating_2018}. One such proxy is based on the number of unique user-days per grid cell, a measure of visitation intensity and, by extension, perceived attractiveness, referred to as Photo User Days (PUD) \citep{wood_using_2013}.
+\\
+While theoretical grounding of indicator selection, CLIP-based image classification, PUD-based proxy derivation, and the statistical linkage of aesthetic proxies to landscape indicators have each been explored, and some combined in parts \citep{liao_oneshot_2025,liao_mapping_2025,vaz_digital_2020}, no study today has integrated all of these components within a single modelling framework. Against this backdrop, Mount Kilimanjaro, with its scenic diversity, cultural significance, and heavy tourist use, offers an ideal study area for analyzing how environmental factors and human perception interact and which landscape features are particularly effective aesthetically. This thesis addresses this gap by combining CLIP-based image classification of georeferenced Flickr photographs with a PUD-based aesthetic proxy and spatial statistical modelling of landscape indicators in the Mount Kilimanjaro region. Specifically, it asks: Which landscape variables are significant predictors of perceived landscape aesthetics in the Mount Kilimanjaro region, modelled on the basis of georeferenced Flickr images and deep learning methods?
+
+
+\section{Literature review}\label{sec:Einleitung}
+
+\subsection{Landscape aesthetics: Concepts and perception}\label{sec:LAConcepts}
+
+Landscape aesthetics can be understood as the pleasurable experience that comes from the view of visual features from a landscape \citep{tribot_integrating_2018}, composed of visual impressions as well as cultural and emotional experiences \citep{bourassa_toward_1988}. As a cultural ecosystem service it contributes directly to human well-being by reducing stress and supporting psychological and physiological recovery \citep{gobster_shared_2007}, and is increasingly recognised as a key, though difficult to quantify, dimension of the ecosystem services agenda \citep{daniel_contributions_2012}.
+\\
+Following the conceptual framework of \citep{tribot_integrating_2018}, landscape aesthetic experience can be understood as occurring between a \textit{transmitter} and a \textit{receiver}. The transmitter approach is linked to the intrinsic, biophysical characteristics of a landscape (its structure, composition, and ecological properties) that are capable of stimulating an aesthetic response (ibid.). The receiver approach, by contrast, centres on how humans perceive and interpret the landscape, encompassing the cognitive processes studied in neuro-aesthetics and psychology, the emotional interpretation of visual stimuli, and the sociological and cultural context in which this perception occurs (ibid.). These  dimensions are mutually reinforcing parts of an aesthetic process \citep{gobster_shared_2007,tribot_integrating_2018}.
+\\
+Because aesthetic perception depends on both objective landscape features and subjective, culturally mediated responses \citep{daniel_whither_2001,zhang_assessment_2022}, social-media-based approaches such as those introduced above \citep{tieskens_aesthetic_2018} treat the decision of a user to photograph, geotag, and upload a particular scene as an implicit indicator of perceived aesthetic value \citep{langemeyer_mapping_2018}. This shifts the empirical focus of landscape aesthetics research from the receiver (direct human perception, typically measured through surveys or photo-questionnaires) towards the transmitter side of the framework, since the landscape and image content themselves become the primary object of quantitative analysis.
+\\
+However, this shift also entails a limitation. The receiver's evaluation is no longer directly observed but only inferred from the location and frequency of uploads, meaning that motivations unrelated to aesthetic appreciation, like social events, personal memory, or the mere presence of tourist infrastructure that attracts visitors independently of landscape quality \citep{tieskens_aesthetic_2018}, cannot be ruled out. Extracting meaningful transmitter-side information from these images at scale therefore requires not only their spatial location but also an understanding of their visual content, that is, which landscape elements are actually depicted. Deep learning-based image classification provides a means to derive this content-level information systematically, without relying on costly manual annotation.
+
+\subsection{Deep learning approaches for image classification}
+
+Over the last 15 years many different model architectures were used to classify social media images for landscape and cultural ecosystem service (CES) assessment automatically. It has evolved from early commercial tools such as Google Vision and Clarifai, which offered limited custoisability for ecological tasks \citep{lingua_valuing_2022,winder_open-source_2022}, to domain-specific classifiers built on convolutional neural networks (CNNs) with transfer learning, and most recently to vision-language models (VLMs).
+\\
+Firstly the most important and dominant CNN architecture for classifying social media images are Residual Networks (ResNet; \citealt{he_deep_2016}). Many different studies have used ResNet models, achieving accuracies in the 74–91\% range across diverse contexts and pretraining strategies (Table 1; \citealt{cardoso_classifying_2022,lingua_valuing_2022,comalada_modelling_2025,xu_revealing_2025,you_mapping_2026}). Secondly Cardoso et al. (2022) shows that the classification process had worked better with ImageNet pretraining than with training from scratch and cross-regional transfer incurred notable accuracy losses (10--17 percentage points when a Portuguese-trained model was applied to Spain). Finaly more recently, \citet{chen_using_2025} showed that EfficientNet-B3 \citep{tan_efficientnet_2019}, using compound scaling of network depth, width and resolution, outperforms both ResNet-152 and VGG-16 (92.1\% accuracy). Additionally all supervised CNN approaches share a key limitation. They require several thousand labelled training images dedicated to a fixed, study-specific category scheme, ranging from 1,778 annotated images in \citet{cardoso_classifying_2022} to 6,911 in \citet{comalada_modelling_2025} and 7,351 in \citet{you_mapping_2026}, and cannot classify categories outside this predefined set without re-annotation and re-training \citep{radford_learning_2021}.
+\\
+In contrast to ResNet departs CLIP \citep{radford_learning_2021} from this paradigm by learning a joint image-text embedding space from 400 million web-sourced pairs, enabling zero-shot classification against arbitrary text prompts without task-specific training data. \citet{liao_mapping_2025} provided the first large-scale CES application, classifying \textasciitilde590,000 Flickr images into 12 CES categories using a hybrid CLIP-based pipeline (88\% accuracy, macro F1 = 0.88) with only 120 labelled images, roughly two orders of magnitude fewer than comparable CNN pipelines (cf. \citealt{cardoso_classifying_2022}: \textasciitilde8,500; \citealt{lingua_valuing_2022}: \textasciitilde35,000). Specifically for the landscape aesthetics class, CLIP achieved F1 = 0.85, and prompt design proved critical, with class-specific mixed prompts consistently outperforming uniform prompt strategies \citep{liao_mapping_2025}.
+
+\begin{table}[ht]
+\centering
+\caption{Summary of deep learning model performance across reviewed studies 
+for landscape and CES image classification.}
+\label{tab:model_comparison}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lllcc}
+\toprule
+\textbf{Study} & \textbf{Model} & \textbf{Architecture} & \textbf{Accuracy} & \textbf{Macro F1} \\
+\midrule
+\multicolumn{5}{l}{\textit{Supervised CNN-based models}} \\
+\midrule
+\citet{havinga_social_2021}
+    & ResNet-50          & CNN (Places365)    & --    & --   \\
+\citet{cardoso_classifying_2022}
+    & ResNet-152         & CNN (ImageNet)     & 87\%  & 0.87 \\
+\citet{lingua_valuing_2022}
+    & ResNet-152         & CNN (Places365)    & 85\%  & 0.85 \\
+\citet{comalada_modelling_2025}
+    & ResNet-152         & CNN (ImageNet)     & 91\%  & 0.91 \\
+\citet{xu_revealing_2025}
+    & ResNet-50          & CNN (SimCLRv2)     & 85\%  & 0.83 \\
+\citet{you_mapping_2026}
+    & ResNet-50          & CNN (ImageNet)     & 84\%  & 0.81 \\
+\citet{chen_using_2025}
+    & EfficientNet-B3    & CNN (ImageNet)     & 92\%  & 0.92 \\
+\midrule
+\multicolumn{5}{l}{\textit{Vision-Language Models -- model comparison 
+\citet{liao_mapping_2025}}} \\
+\midrule
+\citet{liao_mapping_2025}
+    & RN101              & CNN + CLIP         & 78\%  & 0.77 \\
+\citet{liao_mapping_2025}
+    & convnext\_base\_w  & CNN + CLIP         & 80\%  & 0.80 \\
+\citet{liao_mapping_2025}
+    & ViT-B/32           & ViT + CLIP         & 87\%  & 0.86 \\
+\citet{liao_mapping_2025}
+    & EVA01-CLIP-g/14    & ViT + CLIP (giant) & 85\%  & 0.84 \\
+\citet{liao_mapping_2025}
+    & \textbf{MobileCLIP-S1} & Hybrid CNN+ViT & \textbf{90\%} & \textbf{0.90} \\
+This study$^{a}$
+    & CLIP ViT-L/14      & ViT + CLIP         & --    & --   \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{\textwidth}
+\bigskip\raggedright\small
+\textit{Notes:} Accuracy and Macro F1 represent overall model performance on held-out test sets. `--' = not reported or not evaluated in this context. CNN-based models (upper block) require large domain-specific annotated training datasets. CLIP-based models (lower block) enable zero-shot classification without task-specific labels. Within the CLIP model 
+comparison by \citet{liao_mapping_2025}, RN101 and convnext\_base\_w showed consistently weaker performance and were therefore excluded from 
+further evaluation in the present study. CLIP ViT-L/14 was added to the evaluation set of the present study beyond the models tested by \citet{liao_mapping_2025}, motivated by its strong representational capacity for linear probing \citep{radford_learning_2021}. Bold values indicate the best-performing model in the CLIP comparison. $^{a}$ Classification results for CLIP ViT-L/14 are reported in Table~\ref{tab:model_comparison_all} and 
+Table~\ref{tab:linear_probe_comparison}.
+\end{minipage}
+\end{table}
+
+\subsubsection{Model selection for this study}
+Table 1 summarises performance across the reviewed studies. Supervised CNNs achieve the highest absolute accuracy when large labelled datasets are available for a fixed label set, but are costly to annotate and transfer poorly across regions. CLIP instead excels where labelled data is scarce and target categories are better expressed semantically than as fixed indices, conditions that match the heterogeneous, ecologically specific Flickr imagery from the Kilimanjaro region used here, including locally distinctive vegetation types such as \textit{Dendrosenecio} (giant groundsels) or afroalpine grasslands that can be captured through prompt design without representative labelled examples. \citeauthor{liao_mapping_2025}'s (\citeyear{liao_mapping_2025}) binary pre-filtering architecture, which removes irrelevant images before zero-shot classification, further provided direct methodological precedent for the hybrid pipeline adopted in this thesis.
+
+
+
+\subsection{Approaches to operationalising landscape aesthetic value}
+
+Translating the subjective construct of landscape aesthetics into a measurable proxy variable requires an operationalisation strategy \citep{daniel_whither_2001}. Two broad traditions can be distinguished. Firstly survey-based approaches and secondly social-media-based approaches.
+\\
+Survey-based studies typically combine GIS-derived landscape metrics with photo-based preference ratings. \citep{schirpke_predicting_2013} related viewshed-derived landscape metrics to survey-based scenic beauty scores across four Alpine sites, while \citep{frank_assessment_2013} validated a metrics-based aesthetic index against visual ratings from 153 participants, finding the strongest correspondence when photographs, rather than satellite images or land cover maps, were used as stimuli. Such approaches yield high reliability but are costly and spatially limited \citep{schirpke_predicting_2013}.
+\\
+Social media data offer a scalable alternative. Following this approach, the decision of a user to photograph, geotag, and upload a scene is treated as an implicit indicator of perceived aesthetic value \citep{langemeyer_mapping_2018}. Within this tradition, three operationalisation strategies can be identified. The first uses raw visitation intensity, typically Photo User Days (PUD), as a proxy for site attractiveness. \citep{wood_using_2013} validated this measure against empirical visitor counts at 836 sites worldwide, a finding corroborated by a meta-analysis of 355 correlations across 41 studies \citep{ghermandi_geolocated_2022}, though such counts do not distinguish scenic from unrelated content. A second strategy addresses this by manually classifying photograph content into cultural ecosystem service categories. \citep{vaz_digital_2020} modelled counts of categories such as "landscape and nature" or "cultural heritage" separately against distinct environmental predictors, while \citep{langemeyer_mapping_2018} distinguished landscape aesthetics capacity, the biophysical potential of a landscape, assessed via expert-weighted viewshed analysis, from aesthetics flow, the actual realisation of that potential as expressed through geolocated Flickr photographs, finding the two frequently mismatched in space. More recently, \citep{liao_oneshot_2025} automated this content-classification step using multimodal large language models, applying one-shot in-context learning to assign 3.42 million geotagged Flickr images to CES categories including landscape aesthetics, and aggregating classified images into county-level PUDs as a flow intensity measure, extending manual content coding toward a scalable, model-based classification approach. A third strategy uses platform-native engagement metrics rather than upload counts. \citep{despotovic_beautiful_2025} operationalised scenic beauty via the number of flickr "favourite" clicks, arguing this reflects aesthetic appreciation more directly than upload behaviour alone.
+\\
+These strategies mark a progression from undifferentiated visitation proxies toward operationalisations that separate visitation intensity, image content, and viewer engagement, and, in the capacity-flow framework, further distinguish a landscape's inherent potential from its realised appreciation. This distinction is directly relevant to the present study's decision of how content classification (Section 3.3) should inform the construction of the PUD-based aesthetic proxy (Section 3.2.1).
+
+
+\subsection{Landscape variables as predictors of landscape aesthetics}
+While the previous section addressed how landscape imagery can be classified to derive an aesthetic proxy, this section turns to the independent variables of the present study. The biophysical and structural landscape attributes used to predict this proxy. Indicator selection follows the typology of \citet{tveit_key_2006} and \citet{ode_capturing_2008}, who organise landscape visual character into nine theory-grounded concepts (Table \ref{tab:concepts}), complemented by the applied indicator sets and complementary "Scenic Attraction Model" proposed by \citet{frank_landscape_2017}, both of which link specific, quantifiable landscape metrics to landscape aesthetics as a cultural ecosystem service.
+\\
+Of the nine concepts identified by \citet{tveit_key_2006}, seven are operationalised in this thesis: Naturalness, Coherence, Complexity, Disturbance, Visual Scale, Imageability, and Ephemera. Stewardship and Historicity are not addressed, as the remote-sensing-based data sources available for this study (satellite imagery, digital elevation models) do not permit a meaningful assessment of management intensity or historical continuity, both of which typically require field-based or fine-grained cadastral data \citep{ode_capturing_2008}. In addition to these seven concepts, a subset of indicators (e.g. water presence, openness, colour and relief variation) draws on the complementary "Scenic Attraction Model" of \citet{frank_landscape_2017}, which, while not part of the original nine-concept typology, identifies further direct drivers of scenic attractiveness that are well suited to remote-sensing-based assessment.
+\\
+For Naturalness specifically, indicator selection draws additional support from \citet{ode_indicators_2009}, whose findings that succession stage, patch fragmentation, and edge shape complexity are significant drivers of landscape preference lend theoretical support to the general fragmentation- and complexity-related indicators used in this thesis (e.g. NumLandElements, ShapeIndex), even though these are operationalised here as landscape-wide metrics rather than woodland-specific ones as in the original study. Further support comes from \citet{tribot_integrating_2018}, who demonstrate a positive relationship between taxonomic, functional, and phylogenetic diversity and aesthetic value at the ecosystem level. While the present thesis does not incorporate taxonomic or phylogenetic diversity metrics directly, this evidence provides additional theoretical grounding for treating structural proxies of vegetation and land-cover heterogeneity (e.g. Shannon Diversity Index, colour diversity) as meaningful correlates of perceived naturalness and complexity.
+\\
+Naturalness, Coherence, Complexity, Visual Scale, and Disturbance are operationalised through multiple, empirically well-supported indicators (Table \ref{tab:indicators_strong}). Imageability and Ephemera are addressed through a smaller number of indicators for which direct empirical precedent in the aesthetic preference literature is comparatively limited (Table \ref{tab:indicators_weak}). Table \ref{tab:indicators_strong} illustrates commonly used operationalisations of each concept identified in the wider landscape aesthetics literature. The specific indicators adopted in this thesis, together with their data sources and computation methods, are detailed in Section 3.2.2. In total, 49 candidate indicators, including near- and middle-zone variants of viewshed-based metrics, were compiled for the collinearity screening pipeline described in Section 3.3.
+
+
+
+\subsection{Statistical approaches for modelling landscape aesthetic and predictor selection}\label{sec:ModelSOTA}
+
+Beyond the choice of aesthetic proxy (Section~2.2.5) and landscape predictors (Section~2.3), a further methodological decision concerns the statistical framework used to relate environmental predictors to the aesthetic response variable, and the procedure used to select among candidate predictors when many correlated variables are available.
+
+\subsubsection{Modelling Approaches in Landscape and Cultural Ecosystem Service Research}
+
+Studies linking landscape aesthetic or cultural value to biophysical and geospatial predictors have drawn on a range of established statistical and machine-learning frameworks, without converging on a single preferred approach for this application. Early work by \citet{schirpke_predicting_2013} reduced a large set of landscape metrics ($n = 60$) to a smaller number of components via Principal Component Analysis before relating them to perception-survey-based scenic beauty scores through stepwise linear regression. \citet{vaz_digital_2020} instead adopted a multimodel inference framework, fitting Poisson-distributed Generalized Linear Models separately for competing groups of predictors (environmental context, biophysical properties, points of leisure interest, and visual-sensory attributes) and combining them via Akaike-weighted model averaging. More recent studies have turned to tree-based machine-learning algorithms capable of capturing non-linear and interaction effects among predictors \citep{comalada_modelling_2025,havinga_social_2021}. \citet{havinga_social_2021} used Random Forests to predict crowdsourced scenicness ratings from a combination of deep-learning-derived Flickr image variables and environmental indicators, while \citet{comalada_modelling_2025} applied XGBoost to link CNN-classified cultural ecosystem service categories to biophysical predictors such as naturalness, accessibility, and protection status. Taken together, these studies illustrate a shift from classical regression-based frameworks, which emphasise interpretability and explicit hypothesis testing across predictor groups, towards flexible machine-learning approaches that prioritise predictive accuracy but offer more limited insight into the shape and direction of individual predictor--response relationships. This trade-off directly informs the choice of modelling framework for the present study, discussed in the following section.
+
+\subsubsection{Linearity, non-linearity, and model adequacy}
+
+The linearity assumption underlying GLMs is rarely tested explicitly in ecological research. A review of 162 recent studies found that fewer than 15\% reported a formal linearity test, even though non-linear techniques were applied in over a quarter of cases \citep{heit_generalized_2024}. In a comparative case study, GAMs substantially outperformed GLMs by AIC and revealed a threshold response of species abundance to landscape development that standard GLM diagnostics failed to detect (ebd.), suggesting that unexamined linearity assumptions risk obscuring genuine non-linear structure in predictor--response relationships.
+\\
+GAMs address this by replacing fixed linear terms with penalised smooth functions, allowing the functional form of each predictor to be estimated from the data rather than specified a priori \citep{wood_generalized_2017,pedersen_hierarchical_2019}. As a GLM is mathematically a special case of a GAM in which each smooth term reduces to a straight line (edf $\approx$ 1), a GAM does not preclude linear relationships but removes the need to assume them in advance. \citet{huang_generalized_2022} applied this logic to landscape-scale ecosystem service trade-offs in a topographically heterogeneous region, motivated by the expectation that such relationships are seldom linear.
+\\
+Crucially, the present research questions require not only accurate prediction but a clear picture of how each indicator shapes aesthetic value, relatable to the Ode et al. concept framework---an interpretive detail that tree-based methods provide only indirectly via post-hoc tools such as SHAP \citep{comalada_modelling_2025}. GAMs instead yield an explicit smooth function per predictor, making the shape of each relationship directly interpretable from the model itself \citep{wood_generalized_2017,pedersen_hierarchical_2019}. This combination of predictive flexibility and direct interpretability motivated the preference for GAM over Random Forest or XGBoost in the present study.
+
+\subsubsection{Predictor selection}
+
+With large candidate predictor sets, most reviewed studies apply an explicit collinearity or dimensionality-reduction step before model fitting. \citet{vaz_digital_2020} restricted candidate predictors within each model to those with pairwise Spearman correlation below 0.6 and Variance Inflation 
+Factor (VIF) below 5. \citet{schirpke_predicting_2013} instead used PCA to condense 60 landscape metrics into a smaller set of orthogonal components prior to stepwise linear regression. \citet{dormann_collinearity_2013} provide simulation-based support for the simpler, pairwise approach: across a wide range of collinearity structures, selecting the more relevant variable from each correlated pair performed on par with markedly more complex methods such as ridge regression and latent-variable approaches, while retaining each predictor in its original, interpretable form. A comparable pairwise 
+screening step, following \citet{vaz_digital_2020}, was adopted for this thesis and is detailed in Section~3.3.
+
+\subsection{Research gap and synthesis}
+The reviewed literature demonstrates that each component required for this thesis is individually well established. Zero-shot vision-language models 
+enable label-efficient classification of heterogeneous landscape imagery (Section~2.2). Photo-User-Days provide a scalable, validated proxy for landscape aesthetic and recreational value (Section~2.3). In addition to that a broad, theory-grounded set of landscape indicators exists for operationalising the concepts of \citet{ode_capturing_2008} and 
+\citet{tveit_key_2006} (Section~2.4), and Generalized Additive Models offer an interpretable framework for testing non-linear predictor-response relationships while retaining statistical inference on individual effects (Section~2.5).
+\\
+To the best of our knowledge, no existing study models landscape aesthetics using this specific combination of methods, and none of the reviewed combined approaches addresses an ecologically and culturally heterogeneous mountain region of the Global South. Existing combined approaches either rely on CNN-based classifiers with substantial labelling requirements \citep{havinga_social_2021, comalada_modelling_2025}, adopt a predictor framework not grounded in landscape-aesthetic theory \citep{vaz_digital_2020}, operationalize a comparably small number of aesthetic concepts with few indicators retained per concept after reduction \citep{tenerelli_spatial_2017}, or apply models (GLM, Random Forest, XGBoost) that either impose linearity or, even where predictor importance is statistically assessed \citep{comalada_modelling_2025}, do not support inference on the shape or direction of individual predictor–response relationships. This thesis closes this gap by combining zero-shot CLIP-based classification, a Photo-User-Day aesthetic proxy, and a comprehensive, literature-grounded landscape indicator set within a GAM framework, applied to Mount Kilimanjaro as a case study.
+
+
+\section{Data and methods}\label{sec:Data and Methods}
+\subsection{Research area}
+
+Mount Kilimanjaro, located in northeastern Tanzania close to the equator,
+is the highest mountain in Africa and one of the world's largest
+free-standing volcanic massifs. Despite its tropical latitude, the
+mountain's summit remains partially ice-capped, reflecting the pronounced
+climatic gradient that characterizes the region. This gradient, rising from
+the surrounding savanna plains at approximately 700 m to the glaciated
+summit at 5895 m \citep{hemp_continuum_2006}, creates one of the most
+distinct altitudinal vegetation sequences found anywhere in Africa.
+\\
+Aside from the cultivated foothills of the colline zone (700--1100 m), the
+forest belt of Kilimanjaro can be divided into five zones separated by
+significant floristic discontinuities: a submontane zone (1100--1500 m), a
+lower montane zone (1500--2200 m), a middle montane zone (2200--2500 m), an
+upper montane zone (2500--3200 m), and, at the highest elevations, a
+subalpine zone (3700--4000 m) \citep{hemp_continuum_2006}. Unlike the
+seasonally deciduous forests of temperate regions, these montane forest
+zones are predominantly evergreen, dominated above roughly 1700 m by
+Camphor (\textit{Ocotea usambarensis}) and other broadleaved evergreen tree
+species \citep{bussmann2006vegetation}. These elevational boundaries are
+not fixed, however, and shift upward by several hundred metres on the
+drier northern slope relative to the wetter southern slope
+\citep{hemp_continuum_2006}.
+\\
+Across this altitudinal range, Kilimanjaro exhibits a high degree of
+landscape heterogeneity, encompassing forest, moorland, and alpine
+vegetation types that vary with elevation \citep{hemp_continuum_2006,
+bussmann2006vegetation}. Within the forest belt itself, floristic
+composition also differs considerably between the wetter southern and
+drier northern slopes \citep{hemp_continuum_2006}. This combination of
+vertical and horizontal environmental heterogeneity makes Kilimanjaro a
+particularly suitable study area for investigating the relationship
+between landscape characteristics and perceived landscape aesthetics, as
+the region encompasses a wide range of distinct landscape types within a
+comparatively confined geographic area.
+\\
+In addition to this spatial heterogeneity, vegetation activity on
+Kilimanjaro also exhibits pronounced seasonal dynamics, driven primarily by
+the region's bimodal rainfall regime and further modulated by large-scale
+climatic teleconnections such as ENSO and the Indian Ocean Dipole
+\citep{detsch2016seasonal}.
+
+\subsection{Base data}
+\subsubsection{Flickr-Images}
+For this study we are using Flickr-Images. Flickr is an online platform where people can upload, share and manage their images. Flickr was selected as the data source for this study due to its high usage among tourists and hikers, the availability of precise geotagging, and its established use in comparable landscape perception studies. As Mount Kilimanjaro is a popular tourist destination, a substantial number of geotagged photographs are publicly available, making it a suitable case for investigating landscape aesthetics through crowdsourced imagery.
+\\
+The Flickr image dataset used in this study comprises 12{,}333 geotagged photographs collected via the Flickr API within a bounding box covering the Mount Kilimanjaro region (37.006091, -3.422038, 37.737682, -2.864474).
+\\
+For each image, a metadata table provided all information required for the subsequent analysis, including a unique photo identifier (\texttt{Photo\_ID}), the owner of each post (\texttt{owner}), the geographic coordinates of each 
+photo (\texttt{latitude}, \texttt{longitude}), the corresponding location accuracy level (\texttt{accuracy}), and the URL required to retrieve the original image (\texttt{url\_o}).
+
+
+\subsubsection{Geospatial base data}
+Six geospatial base datasets underpin the derivation of the landscape indicators presented in this section. Elevation was represented by two complementary digital elevation models. The Copernicus DEM GLO-30 (Copernicus DEM; \citep{esa_copernicus_2024}) is a 30\,m resolution digital surface model (DSM) derived from TanDEM-X radar interferometry, representing the reflective surface of the terrain including vegetation canopy and built structures. It was used wherever vegetation-induced visual obstruction is relevant to the analysis, namely for the viewshed computation (Section~\ref{sec:Viewshed}), since forest canopy genuinely blocks sightlines and should not be removed from the terrain model used for visibility analysis. The FABDEM dataset \citep{hawker_fabdem_2022}, a bare-earth derivative of the Copernicus DEM produced via machine learning to remove vegetation and building height, was used at the same 30\,m resolution wherever terrain morphology needed to be assessed independently of vegetation structure, namely for observer height correction within the viewshed computation and for the relief diversity indicator (Section~\ref{sec:LandscapeMetrics}). Unlike all other base datasets, which were accessed and exported directly through Google Earth Engine \citep{gorelick_google_2017} in the target projection, FABDEM was instead downloaded separately via the \texttt{fabdem} Python package and subsequently reprojected to EPSG:32737. Separating the DSM and the bare-earth product avoids conflating terrain complexity (a Complexity-concept indicator) with vegetation structure (a Naturalness-concept indicator) through a shared underlying data source.
+\\
+Land cover was obtained from ESA WorldCover 10\,m v200 (2021) \citep{zanaga_esa_2022}, a global land cover product derived from Sentinel-1 and Sentinel-2 imagery, comprising 11 thematic classes (tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, and moss/lichen). ESA WorldCover served as the categorical basis for all landscape-metrics-based indicators (Section~\ref{sec:LandscapeMetrics}), including diversity, patch structure, water presence, and disturbance-related indicators, and additionally provided the land cover input for the visible-composition indicators derived by overlaying the viewshed output with land cover classification (Section~\ref{sec:VisibleComposition}).
+\\
+Vegetation structure was additionally represented by the ETH Global Canopy Height 2020 product \citep{lang_highresolution_2023}, a 10\,m resolution global map of canopy top height for the reference year 2020, derived by fusing sparse GEDI spaceborne LiDAR footprints with Sentinel-2 imagery through a probabilistic deep learning model.
+\\
+Optical satellite imagery was obtained from Sentinel-2 Level-2A Surface Reflectance (10\,m resolution for the visible and near-infrared bands B2/Blue, B3/Green, B4/Red, B8/NIR; 20\,m resolution for the shortwave-infrared band B11/SWIR), accessed via Google Earth Engine and used as the basis for the vegetation, snow-cover, and colour-diversity indicators described in Section~\ref{sec:Indicators}.
+\\
+Leaf Area Index (LAI) was obtained from the MODIS MCD15A3H Version 6.1 product \citep{myneni_mcd15a3h_2021}, a combined Terra/Aqua Level 4 product providing 4-day composite LAI estimates at 500\,m resolution, accompanied by a per-pixel quality layer (\texttt{FparLai\_QC}) indicating retrieval reliability. It served as the basis for the LAI-based indicators of vegetation density and vegetation variability (Section~\ref{sec:Indicators}).
+\\
+All datasets were clipped to the study area's bounding box (36.87--37.88\textdegree{}E, 3.56--2.73\textdegree{}S, extended to accommodate the full 373-cell grid plus an approximately 15\,km buffer for the maximum viewshed search radius) and reprojected to UTM Zone 37S (EPSG:32737) prior to indicator computation, ensuring metre-based distance and area calculations across all subsequent analyses.
+
+\paragraph{Landscape indicators}
+
+From the geospatial base data described above, 50 candidate landscape indicators were derived across the 373-cell study grid, listed in full in Table~\ref{tab:indicators}. Indicators operationalize seven of the nine visual concepts proposed by \citet{tveit_key_2006} and \citet{ode_capturing_2008} (Naturalness, Coherence, Complexity, Disturbance, Visual Scale, Imageability, and Ephemera). Several indicators are computed separately for near and middle distance zones, following \citet{schirpke_predicting_2013}, or restricted to the visually observable area through a viewshed overlay (\texttt{visible\_}-prefixed indicators), following \citet{tenerelli_spatial_2017}. Full formulas, parameter choices, and evidence-strength classification for each indicator are provided in Appendix~\ref{app:indicators}. The resulting 50-indicator candidate set forms the input to the collinearity screening procedure described in Section~\ref{sec:Screening}, which reduces this set to the final predictors entering the Tweedie GAM.
+
+\subsection{Image classification}
+
+\subsubsection{Models}
+
+\paragraph{CLIP}
+In this study, CLIP (Contrastive Language-Image Pre-training) \citep{radford_learning_2021} was used as the foundational vision-language model. CLIP is a multimodal model that connects images and texts in a shared embedding space, developed by OpenAI and trained on 400 million image-text pairs (ibid.). The model consists of two separate encoders. One the one hand an image encoder (based on either a ResNet or a Vision Transformer architecture) and on the other hand a text encoder (based on a Transformer architecture) (ibid.).
+\\
+During pre-training, CLIP processes a batch of $N$ image-text pairs simultaneously \citep{radford_learning_2021}. For each image, the model computes the similarity to all $N$ texts in the batch, and vice versa for each text the similarity to all $N$ images (ibid.). This results in two loss functions. Firstly the image-to-text, where the model learns to identify the correct text for each image, and secondly the text-to-image, where the model learns to identify the correct image for each text (ibid.). Both losses are averaged, forming a symmetric cross-entropy loss that enables CLIP to learn the relationship between images and texts in both directions simultaneously (ibid.). Formally this means, that the $N$ actually corresponding pairs are pushed to become maximally similar in the embedding space, while the remaining $N^2 - N$ incorrect combinations are pushed to become maximally dissimilar (ibid.).
+\\
+Prior to similarity computation, all image and text embeddings are L2-normalised, reducing each embedding vector to a unit vector with a length of 1 \citep{radford_learning_2021}. 
+
+\paragraph{CLIP model variants}
+To identify the most suitable backbone for the image classification pipeline, four CLIP variants were systematically evaluated, following the multi-model comparison approach of \citet{liao_mapping_2025}. The selected variants represent a deliberate diversity in image encoder architecture, model size, and computational efficiency. From the lightweight MobileCLIP-S1, optimised for resource-constrained inference, to the large-scale EVA01-CLIP-g/14 with over one billion parameters. This range allows for a systematic assessment of the trade-off between classification performance and computational cost. All variants share the same contrastive pre-training objective and text encoder architecture described above, and were used with their publicly available pre-trained weights, with model parameters kept frozen throughout the entire study. An overview of the four variants is provided in Table~5.
+
+\subsubsection{Classification levels}
+The image classification pipeline consists of three sequential levels, each filtering the dataset for the subsequent step. Only images classified into the target category at each level are passed to the next.
+
+\textbf{Level 0 -- Indoor/Outdoor:} Images are classified as either indoor (depicting enclosed spaces such as rooms, buildings, or man-made interiors) or outdoor (depicting open-air environments). Only outdoor images are retained for further analysis, as the study focuses on landscape aesthetics in natural settings.
+
+\textbf{Level I -- Human/Non-Human:} Outdoor images are classified as either human (where one or more persons are the clear primary subject of the image) or non-human (where no person or only incidental, non-dominant human figures are present). Only non-human images are retained, as images dominated by people are not considered representative of landscape aesthetic perception.
+
+\textbf{Level II -- Individual/Community-Ecosystem/Landscape:} Non-human outdoor images are classified into three categories:
+\begin{itemize}
+\item \textbf{Individual:} Close-up photographs focusing on a single animal, plant, or object as the clear main subject
+\item \textbf{Community/Ecosystem:} Photographs showing multiple organisms, people, buildings, vehicles, or man-made structures, without forming a wide scenic landscape view
+\item \textbf{Landscape:} Wide-open photographs of natural scenery, often with a visible horizon, showing terrain, vegetation, or sky at an intermediate or far range, without any single subject or man-made structure dominating the frame
+\end{itemize}
+Images classified as landscape and community/ecosystem are retained for the subsequent aesthetic assessment, as these most directly capture the visual experience of natural landscapes that forms the basis of the Photo-User-Days proxy for landscape aesthetic value.
+
+\subsubsection{Zero-shot classification}
+In zero-shot classification, each target class is formulated as a natural language prompt \citep{radford_learning_2021}. The image embedding by CLIP's pre-trained image encoder is then compared to the text embeddings of all class prompts via cosine similarity (ibid.). The class whose text embedding shows the highest cosine similarity to the image embedding is assigned as the final prediction (ibid.). This approach requires no task-specific training data, as the classification decision is based entirely on the semantic alignment between image and text representations learned during pre-training (ibid.). Zero-shot classification was firstly applied at Level 0 (Indoor/Outdoor). 
+
+\subsubsection{Prompts}
+The performance of zero-shot CLIP classifiers is known to be sensitive to the exact wording of the class prompts \citep{yong_prompt_2023, malla_enhancing_2025, liao_mapping_2025}. To identify the most effective prompt formulation for each classification level, three prompt variants were systematically evaluated \citep{ liao_mapping_2025}:
+\begin{itemize}
+\item \textbf{Simple prompts:} Short, generic descriptions of each class (e.g. ``a photo of a landscape'')
+\item \textbf{Detailed prompts:} Longer, more specific descriptions explicitly targeting the visual characteristics of each class (e.g. ``a wide-open shot of nature, often with a visible horizon'')
+\item \textbf{Mixed prompts:} A class-specific combination of the best-performing prompt variant per class, selected based on the highest per-class F1-score on the development set
+\end{itemize}
+Prompt selection followed a stratified Dev/Test holdout split, implemented separately per class to preserve equal class proportions across both subsets, following the stratification principle for accuracy estimation
+described by \citet{kohavi_study_1995}, implemented via scikit-learn \citep{pedregosa_scikit-learn_2011}. An accurated, class-balanced evaluation dataset was divided into a development set (35\%) and a held-out test set (65\%). On the development set, the prompt variant yielding the highest per-class F1-score was identified for each class independently. The resulting Mixed prompt set was then evaluated on the test set, with Macro-averaged F1-score (Macro-F1) as the primary performance metric. Macro-F1 was chosen over accuracy as it weights each class equally regardless of class imbalance, making it more suitable for the unbalanced
+class distributions encountered in social media imagery
+\citep{liao_mapping_2025, sokolova_systematic_2009}.
+
+\subsubsection{Linear probing}
+While zero-shot classification offers a label-efficient approach to image classification \citep{liao_mapping_2025}, it implicitly relies on the
+assumption that natural language prompts can adequately capture the visual characteristics of each target class. Prior work has shown that zero-shot CLIP performance varies considerably across fine-grained classification tasks, performing strongly on some (e.g., Stanford Cars, Food101) while underperforming on others (e.g., Flowers102, FGVCAircraft) \citep{radford_learning_2021}, and that visually or semantically overlapping categories can reduce the
+inter-class separability achievable through text prompts alone \citep{liao_mapping_2025}. In such cases, zero-shot performance may be systematically limited.
+\\
+In this study, zero-shot classification at Level I (Human/Non-Human) revealed a systematic false-positive bias. Images containing small or distant human figures in landscape scenes were consistently misclassified
+as human across all four tested CLIP variants (Cohen's $\kappa$ = 0.374--0.642) \citep{cohen_coefficient_1960}, a distinction that proved difficult to capture through prompt engineering alone. To address this limitation, linear probing was employed as a supervised adaptation strategy \citep{radford_learning_2021}.
+\\
+In linear probing, the CLIP image encoder is kept fully frozen and used exclusively as a feature extractor \citep{radford_learning_2021}. A logistic regression classifier is trained on top of the resulting
+L2-normalised image embeddings, using a small set of labelled training examples. This approach preserves the general-purpose representational capacity of the pre-trained CLIP features while adapting the decision boundary to the specific classification task (ibid.). As no modifications are made to the CLIP model parameters, linear probing does not constitute fine-tuning of the pre-trained model (ibid.).
+\\
+The labelled training data for the linear probe consisted of the annotated gold standard sample ($n = 298$ for Level I; $n = 297$ for Level II). Due to the limited sample size, model performance was estimated using stratified 5-fold cross-validation (\texttt{StratifiedKFold}, \texttt{shuffle=True}, \texttt{random\_state=42}) rather than a single train/test split, ensuring that each sample was used for testing exactly once across the five folds while maintaining the class distribution in each fold. The final classifier was trained on the full annotated dataset and applied to the complete image collection. Linear probing was applied at both Level I and Level II, where zero-shot classification showed systematic weaknesses identified through gold standard validation. The detailed results are reported in Sections~3.3.3 and~3.3.4 respectively.
+
+\begin{longtable}{@{}p{1.8cm}p{1.8cm}p{9.5cm}@{}}
+\caption{Prompt texts used for Level 0 classification (Indoor/Outdoor). The best-performing variant (simple) is indicated in the main-text comparison (Table~\ref{tab:prompt_comparison_level0}).}
+\label{tab:prompt_texts_level0} \\
+\toprule
+\textbf{Variant} & \textbf{Class} & \textbf{Prompt text} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Variant} & \textbf{Class} & \textbf{Prompt text} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+simple   & indoor  & ``a photo of an indoor place'' \\
+         & outdoor & ``a photo of an outdoor place'' \\
+\addlinespace
+detailed & indoor  & ``This is an image taken inside an enclosed structure such as a house, museum, restaurant, or vehicle interior, showing visual cues like ceilings, walls, artificial lighting, furniture, or confined spaces with no visible sky.'' \\
+         & outdoor & ``This is an image taken in an open-air environment such as a forest, mountain, street, beach, or field, showing visual cues like sky, horizon, vegetation, terrain, or natural daylight.'' \\
+\addlinespace
+hybrid   & indoor  & ``This is indoors, showing walls, ceiling, or furniture.'' \\
+         & outdoor & ``This is outdoors, showing sky, nature, or open space.'' \\
+
+\end{longtable}
+
+\begin{longtable}{@{}p{1.8cm}p{1.8cm}p{9.5cm}@{}}
+\caption{Prompt texts used for Level I classification (Human/Non-Human). The best-performing variant (detailed) is indicated in the main-text comparison (Table~\ref{tab:prompt_comparison_level1}).}
+\label{tab:prompt_texts_level1} \\
+\toprule
+\textbf{Variant} & \textbf{Class} & \textbf{Prompt text} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Variant} & \textbf{Class} & \textbf{Prompt text} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+simple    & human     & ``a photo of a person'' \\
+          & non-human & ``a photo of a landscape or scene'' \\
+\addlinespace
+detailed  & human     & ``This is a close-up photo of a person or group of people posing for the camera. Even if there is a beautiful mountain, landscape, or scenic view in the background, the person in the foreground is what this photo is about, not the scenery behind them.'' \\
+          & non-human & ``This is a wide landscape or scenic view where no person is posing prominently in the foreground. The terrain, vegetation, wildlife, or structures fill the frame; any people present are small, distant, or incidental background details.'' \\
+\addlinespace
+mixed     & human     & ``a selfie or portrait dominated by a person in the foreground, regardless of the scenic background behind them'' \\
+          & non-human & ``a wide scenic landscape dominated by terrain, vegetation, or structures, with no person posing in the foreground'' \\
+
+\end{longtable}
+
+\begin{longtable}{@{}p{0.12\textwidth}p{0.18\textwidth}p{0.62\textwidth}@{}}
+\caption{Prompt texts used for Level II classification (Individual / Community-Ecosystem / Landscape). The best-performing variant (mixed) is indicated in the main-text comparison (Table~\ref{tab:prompt_comparison_level2}).}
+\label{tab:prompt_texts_level2} \\
+\toprule
+\textbf{Variant} & \textbf{Class} & \textbf{Prompt text} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Variant} & \textbf{Class} & \textbf{Prompt text} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+simple   & individual           & ``a photo of a single animal, plant, or object as the main subject'' \\
+         & community\newline ecosystem & ``a photo of multiple organisms, people, buildings, vehicles, or urban structures'' \\
+         & landscape            & ``a wide open photo of a natural landscape with a visible horizon'' \\
+\addlinespace
+detailed & individual           & ``This is a close-up photo where a single subject dominates the frame, such as one animal, bird, plant, or object.'' \\
+         & community\newline ecosystem & ``This is a photo showing multiple subjects together, such as a group of animals, mixed vegetation, people, buildings, vehicles, roads, or any other man-made or urban environment.'' \\
+         & landscape            & ``This is a wide-open shot of a natural landscape, often with a visible horizon, showing terrain, vegetation, sky, or natural elements at an intermediate or far range, without any single subject or man-made structure dominating the frame.'' \\
+\addlinespace
+mixed    & individual           & ``a close-up photo with a single animal, plant, or object as the clear main subject'' \\
+         & community\newline ecosystem & ``a photo dominated by multiple organisms, people, buildings, vehicles, or man-made structures'' \\
+         & landscape            & ``a wide natural landscape photo with visible horizon or open terrain, no dominant single subject or man-made structures'' \\
+
+\end{longtable}
+
+\subsubsection{Evaluation strategy}
+The classification pipeline follows a consistent three-stage evaluation strategy at each level. First, a curated, class-balanced dataset is used for model and prompt selection under controlled conditions, providing an efficient basis for identifying the best-performing model-prompt combination without requiring large-scale manual annotation. Second, a randomly drawn gold standard sample is independently annotated by multiple human raters, and inter-annotator agreement is computed to establish the reliability of the resulting labels \citep{artstein_survey_2008}. This gold standard is then used to validate model performance under realistic data conditions. Where zero-shot classification reveals systematic limitations in the gold standard evaluation, a linear probe is trained on the gold standard annotations as a supervised adaptation strategy \citep{radford_learning_2021}. This sequential approach ensures that methodological decisions at each level are grounded in empirical evidence rather than assumptions about model performance.
+
+\subsubsection{Photo-user-days PUD}
+Since CES cannot be measured directly, it is a subjective, mental construct rather than a physical quantity, many studies use proxies to quantify them \citep{wood_using_2013,ghermandi_geolocated_2022,liao_mapping_2025}. Where people take pictures, and where they upload them, is considered an indicator of actual use and appreciation of a place
+\citep{wood_using_2013,ghermandi_geolocated_2022}. Among the metrics used to operationalise this behavioural signal, the photo-user-day (PUD) has
+been established as a more robust alternative to a simple count of images, as it is less sensitive to the disproportionate contribution of a small number of highly active users \citep{wood_using_2013}. Following \citet{wood_using_2013}, a PUD counts a unique user who uploaded at least one photograph at a given location on a given day.
+\\
+For this study, PUD was computed from the subset of Flickr images
+classified as \textit{landscape} through the hierarchical classification
+pipeline described in Section~X.X, spanning the period 2004--2020.
+Following \citet{liao_mapping_2025}, these daily PUD counts were then
+aggregated into an average annual PUD ($\overline{PUD}_{yr}$) per grid
+cell $i$ by averaging yearly PUD totals across all years $T$ covered by
+the dataset:
+
+\[
+\overline{PUD}_{yr}(i) = \frac{1}{T}\sum_{t=1}^{T} PUD_t(i)
+\]
+
+where $PUD_t(i)$ denotes the total number of unique users who uploaded at least one landscape-classified, geotagged photograph in grid cell $i$
+during year $t$, and $T = 17$ (2004--2020). This averaged, grid-cell-level metric, $\overline{PUD}_{yr}$, serves as the primary response variable (\texttt{avg\_annual\_PUD}) throughout the subsequent modelling.
+
+\subsection{Modeling landscape aesthetic}
+\subsubsection{Colinearity screening}
+
+Prior to model fitting, all candidate landscape predictors were screened
+for multicollinearity in a two-stage procedure, following established
+recommendations for ecological data \citep{zuur2010,dormann2012},
+applied independently of model family or response variable.
+\\
+In the first stage, pairwise Spearman rank correlations were computed
+across all predictor pairs. Iteratively, the pair with the highest
+absolute correlation was identified; if it exceeded a threshold of
+$|\rho| \geq 0.6$ \citep{vaz_digital_2020}, the variable with the higher mean
+absolute correlation across the remaining predictor set was removed, as
+it was judged to carry more redundant information overall. This step was
+repeated until no remaining pair exceeded the threshold.
+\\
+In the second stage, the surviving predictors were screened using the
+Variance Inflation Factor (VIF; calculated with the \texttt{car} package, \citealp{fox2018}), computed iteratively from a linear model regressing a representative response variable (average annual photo-user-days, \texttt{avg\_annual\_PUD}) on the full remaining predictor set, following the sequential-removal procedure described by \citet{zuur2010}. Because VIF quantifies collinearity among predictors and does not depend algebraically on the response, the resulting VIF values and predictor ranking are unaffected by the specific choice of response variable; the same screened predictor set was therefore applied uniformly across all response categories in the subsequent analyses. At each iteration, the predictor with the highest VIF was removed if it exceeded a threshold of 5 \citep{vaz_digital_2020}, and the model was refit; this was repeated until all remaining predictors had a VIF below 5.
+\\
+A small number of grid cells had missing values for a subset of predictors. Missing values were handled using pairwise-complete observations for the correlation step and listwise deletion for the VIF regressions; given the low overall missingness, sample size varied only marginally (by at most eleven observations) across screening steps.
+
+\subsubsection{Backwarts feature selection}
+After removing variables that were highly correlated with each other, this study applied backward feature selection to identify, for each model type, the subset of predictors that best explains the response variable. Following the recursive elimination procedure taught in the Data Analysis course \citep{zeuss2026feature}, University of Marburg, a custom function was implemented in R, following the general backward stepwise selection procedure described by \citet{james2013islr}. The model started with all remaining candidate predictors, and in each iteration every variable was removed once for testing purposes (ibid.). The variable whose removal improved model fit the most (measured via the Akaike Information Criterion (AIC)) was permanently excluded. The removal was repeated until no further exclusion improved model fit. Backward selection was applied separately for each of the three interpretable model types (LM, GLM, GAM), since the optimal
+predictor subset can differ depending on model structure and distributional assumptions.
+
+\subsubsection{Model evaluation}
+This study evaluated five different models for predicting the response
+variable. The models used were Linear Models (LM), Generalized Linear
+Models (GLM), Generalized Additive Models (GAM), Random Forest (RF), and
+XGBoost (XGB). Since LM and GLM have no free hyperparameters to tune,
+hyperparameter tuning was performed only for GAM, RF, and XGB. A spatial
+cross-validation was applied to find the best model configuration, rather
+than conventional random k-fold cross-validation, because the response
+variable was found to be spatially autocorrelated
+\citep{roberts2017crossvalidation}, as confirmed by a Moran's I test
+(I = 0.26082, p = 0.001). Spatial folds were generated separately for each
+response variable using the blockCV package \citep{valavi2019blockcv},
+with block size determined from the range of spatial autocorrelation
+estimated for the respective response variable and data were then
+assigned to five spatially separated folds to prevent spatial
+autocorrelation between training and test sets. For Random Forest, a grid
+search was performed across 36 combinations of the number of trees (300,
+500, 1000), the number of predictors considered at each split (3, 6, 9,
+12), and the minimum terminal node size (1, 5, 10). For XGBoost, 108
+combinations of maximum tree depth (2, 3, 4), number of boosting rounds
+(30, 50, 100), learning rate (0.03, 0.05, 0.1), subsample ratio (0.7,
+1.0), and column subsample ratio (0.7, 1.0) were tested. For GAM, the
+basis dimension $k$ of the smooth terms was tuned across five candidate
+values (5, 7, 9, 12, 15), using thin plate regression splines with
+shrinkage (\texttt{bs = "ts"}) estimated via restricted maximum likelihood
+(REML) \citep{wood2025gam}. In each case, model performance was assessed
+using the root mean square error (RMSE) averaged across the five spatial
+folds, and the hyperparameter combination yielding the lowest RMSE was
+selected as optimal for each model and response variable.
+\\
+Building on this hyperparameter tuning, the final performance of all five
+models was assessed and compared across four analysis scenarios, defined
+by the combination of response variable (\texttt{avg\_annual\_PUD} vs.
+\texttt{n\_images}) and predictor set (the full set of 18 candidate
+predictors vs. the response- and model-specific backward-selected
+subsets described above). For LM, GLM and GAM, the corresponding
+backward-selected predictor subsets were used in the reduced-predictor
+scenarios, whereas Random Forest and XGBoost retained the full predictor
+set across all scenarios, consistent with their comparatively lower
+sensitivity to irrelevant predictors and with backward selection having
+been applied only to the three interpretable model types.
+\\
+For each scenario, model performance was evaluated using 5-fold
+cross-validation, repeated 50 times with different fold assignments to
+account for variability introduced by the random partitioning into folds.
+In each repetition, both a random and a spatially clustered fold
+assignment were generated and evaluated in parallel, allowing model
+performance under conventional random cross-validation to be compared
+directly with performance under a spatially informed cross-validation
+scheme, with spatial folds generated by $k$-means clustering of the grid
+cell coordinates into five spatial clusters.
+\\
+For each model, response variable, and cross-validation type, the root
+mean square error (RMSE), mean absolute error (MAE), and a pseudo
+R\textsuperscript{2} (defined as $1 - SS_{res}/SS_{tot}$ on the held-out
+cross-validation predictions) were computed for each repetition and
+subsequently averaged across the 50 repetitions, yielding a total of
+10,000 individual model fits across all scenarios, repetitions, models,
+and cross-validation types.
+
+\subsubsection{Model prediction}
+
+Following model comparison and selection (see Section~\ref{sec:model_comparison}), the best-performing model was identified based on the cross-validation performance metrics reported above. This choice was further supported by a post-hoc visual inspection of the observed relationships between avg\_annual\_PUD and each individual indicator, which was consistent with the functional characteristics of the selected model --- reflecting the general principle that model selection should not rely on statistical performance alone, but should also account for the shape of the predictor--response relationships \citep{guisan2000predictive}. The selected model was then refit on the complete training dataset (the 373 grid cells with valid PUD observations) using its associated predictor set (i.e., either the full set of screened indicators or the reduced subset retained after selection, depending on which combination achieved the lowest prediction error). Since landscape indicators were available across the entire study area, rather than only for the 373 cells with observed PUD, the final model was applied to predict avg\_annual\_PUD for every grid cell within this larger extent, producing a spatially continuous, area-wide prediction surface of landscape aesthetic quality across the full study area \citep{guisan2000predictive}. Predictive accuracy of the final fit was quantified by comparing observed and predicted values for the 373 cells with valid PUD observations, using $R^2$ and RMSE.
+
+\section{Results}
+\subsection{Image classification}
+\subsubsection{Level 0: Indoor/Outdoor classification}
+\paragraph{Model and prompt selection}
+Four CLIP variants were evaluated on a curated, class-balanced development dataset following a stratified Dev/Test-split (35\%/65\%). On the development set, Simple prompts consistently outperformed Detailed and Hybrid variants for the majority of models, and the resulting optimal per-class prompt set coincided with the Simple configuration for three of the four models (CLIP ViT-B/32, CLIP ViT-L/14, MobileCLIP-S1); only EVA01-CLIP-g/14 favoured the Detailed configuration for both classes. On this internal Test-Set, CLIP ViT-L/14 and MobileCLIP-S1 achieved the highest Macro F1-scores (0.927 each), followed by EVA01-CLIP-g/14 (0.888) and CLIP ViT-B/32 (0.847) (Table~6). As this internal Test-Set is drawn from the same pool as the Dev set, these results were treated as preliminary and used only to determine each model's optimal prompt configuration; final model selection was based on evaluation against an independently annotated gold standard, reported
+below.
+\begin{table}[htbp]
+\centering
+\caption{Test-set performance comparison of all evaluated models for Level 0 classification (Indoor/Outdoor), using each model's best-performing prompt variant (see Appendix~\ref{tab:prompt_comparison_level0}). CLIP-ViT-L14 and MobileCLIP-S1 achieved identical Macro F1; MobileCLIP-S1 was selected for the full pipeline due to its substantially lower computational cost.}
+\label{tab:level0_final_comparison}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Test Accuracy (\%)} & \textbf{Macro Precision} & \textbf{Macro Recall} & \textbf{Macro F1} \\
+\midrule
+CLIP-ViT-L14              & 92.7 & 0.934 & 0.927 & 0.927 \\
+\textbf{MobileCLIP-S1 (selected)} & \textbf{92.7} & \textbf{0.936} & \textbf{0.927} & \textbf{0.927} \\
+EVA01-CLIP-g14             & 88.8 & 0.901 & 0.888 & 0.888 \\
+CLIP-ViT-B32               & 85.0 & 0.885 & 0.850 & 0.847 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\paragraph{Gold standard annotation and validation}
+A random sample of 300 images was drawn from the Flickr dataset and independently annotated by two annotators. Inter-annotator agreement was measured using Cohen's $\kappa$ \citep{cohen_coefficient_1960}, which corrects for chance agreement and is widely used in annotation quality assessment \citep{artstein_survey_2008,cardoso_classifying_2022}. Agreement was high (Cohen's $\kappa$ = 0.813, raw agreement = 98.0\%, disagreements = 6). A gold standard was derived from the annotations to serve as the
+reference for model evaluation.
+\\
+All four CLIP variants, each with its respective optimal prompt configuration from the development-set evaluation, were subsequently evaluated against this gold standard. MobileCLIP-S1 achieved the strongest
+agreement (accuracy = 98.7\%, Cohen's $\kappa$ = 0.868), followed by CLIP ViT-B/32 (accuracy = 97.3\%, Cohen's $\kappa$ = 0.701), CLIP ViT-L/14 (accuracy = 96.0\%, Cohen's $\kappa$ = 0.604), and EVA01-CLIP-g/14
+(accuracy = 95.3\%, Cohen's $\kappa$ = 0.564). Notably, CLIP ViT-L/14 — which had matched MobileCLIP-S1 on the internal Test-Set — performed markedly worse against the gold standard, confirming that the internal Dev/Test evaluation alone would not have reliably identified the best-performing model. Given its strongest agreement with the gold standard and its substantially lower computational cost ($\sim$13M vs
+$\sim$307M parameters), MobileCLIP-S1 with the Simple prompt configuration was selected as the final model for Level 0.
+\\
+The confusion matrix for MobileCLIP-S1 revealed that all 282 true outdoor images were correctly classified, while 4 of 18 true indoor images were misclassified as outdoor (Recall$_{\mathrm{indoor}}$ = 0.78). Given the
+strong overall performance and the negligible proportion of indoor images in the Kilimanjaro dataset, no further adaptation of the classification method was deemed necessary for Level 0. The final classification was applied to the full dataset of 8,820 images, yielding 8,219 outdoor images retained for subsequent classification levels.
+
+\begin{table}[htbp]
+\centering
+\caption{Inter-annotator agreement for gold-standard label creation (Indoor/Outdoor), based on 300 independently double-annotated images.}
+\label{tab:interannotator_indooroutdoor}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Raw Agreement (Annotator 1 vs. Annotator 2) & 98.0\% \\
+Cohen's $\kappa$                             & 0.813 \\
+Agreements / Disagreements                    & 294 / 6 \\
+Total images                                  & 300 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Performance of all evaluated models against the gold-standard labels (Indoor/Outdoor, $n=300$).}
+\label{tab:gold_standard_validation_indooroutdoor}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{Cohen's $\kappa$} \\
+\midrule
+\textbf{MobileCLIP-S1 (selected)} & \textbf{0.987} & \textbf{0.987} & \textbf{0.987} & \textbf{0.986} & \textbf{0.868} \\
+CLIP-ViT-B32              & 0.973 & 0.974 & 0.973 & 0.970 & 0.701 \\
+CLIP-ViT-L14              & 0.960 & 0.957 & 0.960 & 0.958 & 0.604 \\
+EVA01-CLIP-g14            & 0.953 & 0.951 & 0.953 & 0.952 & 0.564 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsubsection{Level I: Human/Non-Human classification and linear probing}
+
+
+\paragraph{Model and prompt selection}
+Four CLIP variants were evaluated on a curated, class-balanced dataset (200 images per class) using the same stratified Dev/Test-split approach as Level 0. On the development set, MobileCLIP-S1 with Detailed prompts achieved the highest Macro F1-score (0.928), followed by EVA01-CLIP-g/14 with Detailed prompts (0.871) and CLIP ViT-L/14 with Detailed prompts (0.785). On the held-out test set, MobileCLIP-S1 achieved the highest overall performance (Accuracy = 91.9\%, Macro F1 = 0.919), followed by EVA01-CLIP-g/14 (Macro F1 = 0.904), CLIP ViT-L/14 (Macro F1 = 0.873), and CLIP ViT-B/32 (Macro F1 = 0.735) (Table~6). As this internal Test-Set is drawn from the same pool as the Dev set, these results were treated as preliminary and used only to determine each model's optimal prompt configuration; final model selection was based on evaluation against an independently annotated gold standard, reported
+below.
+
+\begin{table}[htbp]
+\centering
+\caption{Test-set performance comparison of all evaluated models for Level I classification (Human/Non-Human), using each model's best-performing prompt variant (see Appendix~\ref{tab:prompt_comparison_level1}).}
+\label{tab:level1_final_comparison}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Test Accuracy (\%)} & \textbf{Macro Precision} & \textbf{Macro Recall} & \textbf{Macro F1} \\
+\midrule
+\textbf{MobileCLIP-S1 (selected)} & \textbf{91.9} & \textbf{0.925} & \textbf{0.919} & \textbf{0.919} \\
+EVA01-CLIP-g14              & 90.4 & 0.904 & 0.904 & 0.904 \\
+CLIP-ViT-L14                & 87.3 & 0.874 & 0.873 & 0.873 \\
+CLIP-ViT-B32                & 74.6 & 0.797 & 0.746 & 0.735 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Gold standard annotation and validation}
+A random sample of 298 images was drawn from the outdoor-classified dataset and independently annotated by two annotators. Inter-annotator agreement was measured using Cohen's $\kappa$, yielding substantial but imperfect agreement ($\kappa$ = 0.75, raw agreement = 89.9\%, disagreements = 30, Table~7), reflecting the inherent difficulty of the human/non-human distinction even for human annotators. A gold standard was derived from the annotations.
+\\
+Zero-shot evaluation of all four CLIP variants against the gold standard revealed a systematic false-positive bias affecting small or distant human figures in landscape scenes. Three of the four variants showed pronounced disagreement, with Cohen's $\kappa$ ranging from 0.374 (CLIP ViT-L/14) to 0.525 (EVA01-CLIP-g/14) and disagreement rates between 23.2\% and 29.2\%.
+CLIP ViT-B/32 achieved comparatively higher zero-shot agreement ($\kappa$ = 0.642, disagreement rate = 14.1\%), though its disagreements were concentrated at the same boundary cases. This systematic limitation, which proved resistant to prompt engineering across all four variants, motivated the adoption of linear probing as a supervised adaptation strategy
+\citep{radford_learning_2021}.
+
+\begin{table}[htbp]
+\centering
+\caption{Inter-annotator agreement for gold-standard label creation (Human/Non-Human), based on 298 independently double-annotated images.}
+\label{tab:interannotator_humannonhuman}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Raw Agreement (Annotator 1 vs. Annotator 2) & 89.9\% \\
+Cohen's $\kappa$                             & 0.750 \\
+Agreements / Disagreements                    & 268 / 30 \\
+Total images                                  & 298 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Performance of all evaluated models against the gold-standard labels (Human/Non-Human, $n=298$).}
+\label{tab:gold_standard_validation_humannonhuman}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{Cohen's $\kappa$} \\
+\midrule
+\textbf{CLIP-ViT-B32 (selected)} & \textbf{0.859} & \textbf{0.861} & \textbf{0.859} & \textbf{0.852} & \textbf{0.642} \\
+EVA01-CLIP-g14            & 0.768 & 0.823 & 0.768 & 0.777 & 0.525 \\
+MobileCLIP-S1             & 0.752 & 0.816 & 0.752 & 0.761 & 0.497 \\
+CLIP-ViT-L14              & 0.708 & 0.741 & 0.708 & 0.717 & 0.374 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Linear probe training and evaluation}
+
+A linear probe was trained on the frozen CLIP image embeddings of all four model variants, using the 298-image gold standard as labelled training data. Model performance was estimated via stratified 5-fold cross-validation. All four linear probes substantially outperformed their zero-shot counterparts (Table~8). CLIP ViT-L/14 achieved the highest overall performance (AUC = 0.991 $\pm$ 0.007, Accuracy = 0.943, Precision$_{\mathrm{human}}$ = 0.857, Recall$_{\mathrm{human}}$ = 0.978), with false positives reduced from 87 (zero-shot) to 15.
+\\
+Notably, CLIP ViT-L/14, which showed the weakest zero-shot performance among the four variants on both the curated evaluation dataset (Macro F1 = 0.873) and the gold standard ($\kappa$ = 0.374), achieved the highest
+linear probe performance (AUC = 0.991), effectively inverting its zero-shot ranking relative to the other three variants. Absolute differences in linear probe AUC across the four models were nonetheless small (0.981--0.991), with overlapping standard deviations, precluding strong claims of statistical superiority. CLIP ViT-L/14 was therefore selected as the final model for Level I, based on its highest-ranked linear probe performance and the substantial reduction in false positives (from 59 to 15) and false negatives (from 28 to 2) it achieved relative to zero-shot classification. The linear probe was applied to all 8,219 outdoor images, yielding 5,240 non-human images retained for Level II.
+
+\begin{table}[htbp]
+\centering
+\caption{Linear probe performance for Level I classification (Human/Non-Human), conducted after zero-shot evaluation against the gold standard (Table~\ref{tab:gold_standard_validation_humannonhuman}) proved insufficient. CLIP-ViT-L14 was selected based on the highest mean AUC, despite showing the weakest zero-shot agreement with the gold standard (Cohen's $\kappa = 0.374$).}
+\label{tab:linearprobe_humannonhuman}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Model} & \textbf{Embedding Dim.} & \textbf{AUC (mean $\pm$ SD)} & \textbf{Accuracy} \\
+\midrule
+\textbf{CLIP-ViT-L14 (selected)} & \textbf{768}  & \textbf{0.991 $\pm$ 0.007} & \textbf{0.943} \\
+CLIP-ViT-B32              & 512  & 0.989 $\pm$ 0.009 & 0.936 \\
+EVA01-CLIP-g14            & 1024 & 0.987 $\pm$ 0.015 & 0.926 \\
+MobileCLIP-S1             & 512  & 0.981 $\pm$ 0.014 & 0.926 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Level II: Individual/Community-Ecosystem/Landscape classification and linear probing}
+
+\paragraph{Model and prompt selection}
+Four CLIP variants were evaluated on a curated dataset of 100 images per class (300 total) using a stratified Dev/Test-split (35\%/65\%). On the development set, MobileCLIP-S1 with Mixed prompts achieved the highest Macro F1-score (0.787), outperforming EVA01-CLIP-g/14 with Detailed prompts (0.740), CLIP ViT-B/32 with Detailed prompts (0.739), and CLIP ViT-L/14 with Mixed prompts (0.697). On the held-out test set, MobileCLIP-S1 retained the best overall performance (Accuracy = 81.0\%, Macro F1 = 0.806), followed by EVA01-CLIP-g/14 (Macro F1 = 0.781), CLIP ViT-B/32 (Macro F1 = 0.767), and CLIP ViT-L/14 (Macro F1 = 0.592) (Table~6).
+
+\begin{table}[htbp]
+\centering
+\caption{Test-set performance comparison of all evaluated models for Level II classification (Landscape / Community-Ecosystem / Individual), using each model's best-performing prompt variant (see Appendix~\ref{tab:prompt_comparison_level2}).}
+\label{tab:level2_final_comparison}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Test Accuracy (\%)} & \textbf{Macro Precision} & \textbf{Macro Recall} & \textbf{Macro F1} \\
+\midrule
+\textbf{MobileCLIP-S1 (selected)} & \textbf{81.0} & \textbf{0.810} & \textbf{0.810} & \textbf{0.806} \\
+EVA01-CLIP-g14              & 78.5 & 0.783 & 0.785 & 0.781 \\
+CLIP-ViT-B32                & 76.9 & 0.767 & 0.769 & 0.767 \\
+CLIP-ViT-L14                & 61.0 & 0.793 & 0.610 & 0.592 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Gold Standard Annotation and Validation}
+A random sample of 297 images was drawn from the non-human-classified dataset and independently annotated by three annotators (NB, LE, and MED). Inter-annotator agreement was measured using pairwise Cohen's $\kappa$ and Fleiss' $\kappa$ \citep{fleiss_measuring_1971} for agreement across all three annotators simultaneously, as recommended for multi-rater annotation settings. Pairwise Cohen's $\kappa$ revealed high agreement between NB and LE ($\kappa$ = 0.939), while MED showed systematically lower agreement with both NB ($\kappa$ = 0.467) and LE ($\kappa$ = 0.472), predominantly at the boundary between landscape and community ecosystem. Overall Fleiss' $\kappa$ was 0.588, indicating moderate agreement across all three annotators, with disagreements occurring in 95 of 297 cases (Table~7).
+\\
+Zero-shot evaluation of all four variants against the gold standard showed MobileCLIP-S1 as the strongest classifier (Accuracy = 85.5\%, Cohen's $\kappa$ = 0.678, disagreements = 43), followed by CLIP ViT-B/32 ($\kappa$ = 0.620), CLIP ViT-L/14 ($\kappa$ = 0.502), and EVA01-CLIP-g/14 ($\kappa$ = 0.384, disagreements = 105). Given the moderate performance across all variants, linear probing was adopted for Level II following the same rationale as Level I.
+
+\begin{table}[htbp]
+\centering
+\caption{Inter-annotator agreement for gold-standard label creation (Individual / Community-Ecosystem / Landscape), based on 297 independently triple-annotated images.}
+\label{tab:interannotator_indcoecoland}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Cohen's $\kappa$ (Annotator 1 vs. Annotator 2) & 0.939 \\
+Cohen's $\kappa$ (Annotator 1 vs. Annotator 3) & 0.467 \\
+Cohen's $\kappa$ (Annotator 2 vs. Annotator 3) & 0.472 \\
+Fleiss' $\kappa$ (all three annotators)          & 0.588 \\
+Raw Agreement (Annotator 1 vs. Annotator 2)     & 97.3\% \\
+Images with disagreement (Annotator 1 vs. 2)    & 8 \\
+Total images                                     & 297 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Zero-shot performance of all evaluated models against the gold-standard labels (Individual / Community-Ecosystem / Landscape, $n=297$).}
+\label{tab:gold_standard_validation_indcoecoland}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{Cohen's $\kappa$} \\
+\midrule
+\textbf{MobileCLIP-S1}    & \textbf{0.855} & \textbf{0.853} & \textbf{0.855} & \textbf{0.853} & \textbf{0.678} \\
+CLIP-ViT-B32               & 0.842 & 0.838 & 0.842 & 0.824 & 0.620 \\
+CLIP-ViT-L14                & 0.774 & 0.776 & 0.774 & 0.775 & 0.502 \\
+EVA01-CLIP-g14              & 0.646 & 0.776 & 0.646 & 0.677 & 0.384 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Linear Probe Training and Evaluation}
+Linear probes were trained on the frozen embeddings of all four CLIP variants using the 297-image gold standard and evaluated via stratified 5-fold cross-validation. All linear probes improved upon their zero-shot counterparts. MobileCLIP-S1 achieved the highest Macro F1-score (0.819, AUC OvR = 0.957 $\pm$ 0.019), with particularly strong performance on the landscape class (F1 = 0.922) and weaker performance on community ecosystem (F1 = 0.693), reflecting the inherent ambiguity of this class as identified during annotation. In contrast to Level I, MobileCLIP-S1 maintained its superiority across both zero-shot and linear probe evaluation at Level II, confirming its suitability as the final model (Table~8). The linear probe was applied to all 5,240 non-human images, yielding 3,422 landscape-classified images and 1,301 comunity/ecosystem-classified images for the subsequent aesthetic assessment.
+
+\begin{table}[htbp]
+\centering
+\caption{Linear probe performance for Level II classification (Individual / Community-Ecosystem / Landscape). AUC is computed one-vs-rest (OvR) across the three classes. MobileCLIP-S1 was selected based on the highest Macro F1, consistent with its top zero-shot performance against the gold standard (Table~\ref{tab:gold_standard_validation_indcoecoland}).}
+\label{tab:linearprobe_indcoecoland}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Embedding Dim.} & \textbf{AUC (OvR, mean $\pm$ SD)} & \textbf{Accuracy} & \textbf{Macro F1} \\
+\midrule
+\textbf{MobileCLIP-S1 (selected)} & \textbf{512}  & \textbf{0.957 $\pm$ 0.019} & \textbf{0.865} & \textbf{0.819} \\
+CLIP-ViT-B32              & 512  & 0.962 $\pm$ 0.009 & 0.859 & 0.811 \\
+EVA01-CLIP-g14            & 1024 & 0.956 $\pm$ 0.017 & 0.855 & 0.795 \\
+CLIP-ViT-L14              & 768  & 0.951 $\pm$ 0.012 & 0.849 & 0.788 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Modeling PUD}
+\subsubsection{Indicator selection}
+\paragraph{Multicollinearity screening}
+Two-stage collinearity screening was applied to the initial set of 48 candidate landscape indicators. First, pairwise Spearman rank correlations were computed across all candidates, where a pair exceeded the threshold of $|\rho| \geq 0.60$, the variable with the higher mean absolute correlation across the remaining candidate set was removed, and correlations were recalculated iteratively. This step removed 30 variables (Table~\ref{tab:screening_summary}. The full elimination history is in the Appendix Table~\ref{tab:screening_full_history}).
+\\
+The 18 variables surviving pairwise screening were then subjected to iterative variance inflation factor (VIF) analysis, removing the variable with the highest VIF at each iteration until all remaining VIFs fell below the conventional threshold of 5.0 \citep{zuur2010}. This second stage removed one additional variable, visible\_water\_middle (VIF = 27.77). That was a case in which pairwise correlation alone had not flagged the redundancy, since VIF captures multivariate collinearity (a variable's relationship to the \textit{combination} of all other predictors) rather than only pairwise relationships.
+\\
+The resulting final set of 17 landscape indicators (Table~\ref{tab:final_predictors_vif}) showed no remaining multicollinearity concerns, with VIF values ranging from 1.09 (visible\_water\_near) to 2.06 (visible\_area\_middle\_km2). This set formed the basis for all subsequent model fitting (Section~\ref{sec:model_fitting}).
+\begin{table}[htbp]
+\centering
+\caption{Final set of 17 landscape indicators retained after two-stage collinearity screening (pairwise Spearman correlation, $|\rho| < 0.60$, followed by iterative VIF reduction, VIF $< 5.0$), sorted by ascending VIF.}
+\label{tab:final_predictors_vif}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Indicator} & \textbf{VIF} \\
+\midrule
+visible\_water\_near              & 1.09 \\
+ShapeIndex                        & 1.13 \\
+ColorDiversity                    & 1.17 \\
+ColorDiversity\_var               & 1.31 \\
+DistanceToWaterway\_km            & 1.38 \\
+NDVI\_var                         & 1.41 \\
+VerticalStructuralHeterogeneity   & 1.44 \\
+ReliefDiversity                   & 1.49 \\
+ForestEcotoneDensity              & 1.50 \\
+ContagionIndex                    & 1.54 \\
+dist\_sd\_middle\_m                & 1.67 \\
+LAI\_var                          & 1.68 \\
+visible\_ColorDiversity           & 1.71 \\
+dist\_sd\_near\_m                  & 1.81 \\
+NDSI                              & 1.96 \\
+visible\_NDSI\_mean                & 2.03 \\
+visible\_area\_middle\_km2          & 2.06 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of the two-stage collinearity screening process.}
+\label{tab:screening_summary}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Step} & \textbf{Count} \\
+\midrule
+Initial candidate indicators              & 48 \\
+Removed via pairwise Spearman screening ($|\rho| \geq 0.60$) & 30 \\
+Removed via iterative VIF reduction (VIF $\geq 5.0$)          & 1  \\
+\textbf{Final retained indicators}        & \textbf{17} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Backwarts feature selection}
+
+Following collinearity screening, backward AIC-based feature selection (Section~\ref{sec:backward_selection_methods}) was performed separately for each of the three interpretable model types (LM, GLM, GAM), since the optimal predictor subset can differ depending on model structure and distributional assumptions. This reduced the predictor set from 17 to 5 for LM, 9 for GLM, and 12 for GAM (Table~\ref{tab:backward_selection_results}).
+\\
+Three predictors (ReliefDiversity, ColorDiversity, and visible\_NDSI\_mean) were retained across all three models, suggesting a robust, model-independent association with the response variable. visible\_water\_near was retained by both LM and GAM, though its pronounced zero-inflation (80\% of grid cells had a value of exactly zero) required it to be sqrt-transformed and, in the case of GAM, modelled as a linear rather than a smooth term to avoid prediction instability under cross-validation (Section~\ref{sec:gam_stability}).
+
+\begin{table}[htbp]
+\centering
+\caption{Model-specific predictor sets after backward AIC-based feature selection, starting from the 17 predictors retained after collinearity screening (Table~\ref{tab:final_predictors_vif}).}
+\label{tab:backward_selection_results}
+\begin{tabular}{@{}lcp{9cm}@{}}
+\toprule
+\textbf{Model} & \textbf{N} & \textbf{Retained predictors} \\
+\midrule
+LM  & 5 & ReliefDiversity, visible\_water\_near, VerticalStructuralHeterogeneity, ColorDiversity, visible\_NDSI\_mean \\
+\addlinespace
+GLM (Gamma) & 9 & visible\_area\_middle\_km2, ShapeIndex, ReliefDiversity, NDSI, NDVI\_var, VerticalStructuralHeterogeneity, ColorDiversity, visible\_NDSI\_mean, visible\_ColorDiversity \\
+\addlinespace
+GAM (Gamma) & 12 & dist\_sd\_near\_m, visible\_area\_middle\_km2, ShapeIndex, ForestEcotoneDensity, ReliefDiversity, NDSI, NDVI\_var, visible\_water\_near, VerticalStructuralHeterogeneity, ColorDiversity, ColorDiversity\_var, visible\_NDSI\_mean \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Model evaluation}
+The results of the model evaluation, based on 50 repetitions of 5-fold spatial cross-validation, show that the best-performing regression-based model is the GAM, with the lowest RMSE (0.331 $\pm$ 0.015) and MAE (0.152 $\pm$ 0.003), and the highest Pseudo-R\textsuperscript{2} (0.026 $\pm$ 0.091) on the test set, as well as the best values on the training set (RMSE = 0.261 $\pm$ 0.002, MAE = 0.137 $\pm$ 0.000, Pseudo-R\textsuperscript{2} = 0.326 $\pm$ 0.014). This is followed by the GLM (Test: RMSE = 0.342 $\pm$ 0.013, MAE = 0.159 $\pm$ 0.007, Pseudo-R\textsuperscript{2} = -0.039 $\pm$ 0.080) and the LM (Test: RMSE = 0.345 $\pm$ 0.019, MAE = 0.169 $\pm$ 0.005, Pseudo-R\textsuperscript{2} = -0.055 $\pm$ 0.120). Both GLM and LM show negative Pseudo-R\textsuperscript{2} values on the test set, indicating that neither model explains more variance than simply predicting the mean.
+\\
+In addition, the tree-based models performed substantially better on the training data compared to the regression-based models, with Pseudo-R\textsuperscript{2} values ranging from 0.546 (XGBoost) to 0.878 (Random Forest). However, their test-set performance is close to the values obtained from the regression-based models (Test Pseudo-R\textsuperscript{2}: 0.062 for Random Forest, 0.020 for XGBoost). It should be noted that the difference between the training and test sets is considerable for the tree-based models, particularly with respect to the Pseudo-R\textsuperscript{2} values. This is indicative of overfitting. While the train-test gap for the regression-based models lies at about 0.3 (LM: 0.285, GLM: 0.312, GAM: 0.300), the gap for XGBoost is 0.526, and for Random Forest as high as 0.816. Overall, none of the five models achieved strong predictive performance. This is particularly evident in the test-set Pseudo-R\textsuperscript{2} values, which remained modest and lay close together across all models, ranging from -0.055 (LM) to 0.062 (Random Forest).
+\\
+GAM was therefore selected as the final model. This choice is motivated both by its ability to capture potentially non-linear relationships between the landscape indicators and the response variable (unlike LM and GLM, which are restricted to linear predictor-response relationships) and by its comparatively small train-test gap, which suggests better generalisation to unseen, spatially distant locations than the tree-based models, despite their higher training-set fit. 
+
+\subsubsection{Final prediction of PUD}
+
+\begin{table}[htbp]
+\centering
+\caption{Final model comparison for avg\_annual\_PUD, based on 50 repetitions of 5-fold spatial cross-validation. Train metrics reflect in-sample fit (averaged across the 5 folds' training data within each repetition); Test metrics reflect out-of-sample performance on held-out spatial blocks. Within each model family, the best Test Pseudo-R\textsuperscript{2} is shown in bold.}
+\label{tab:final_model_comparison}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Model} & \textbf{Set} & \textbf{RMSE (mean $\pm$ SD)} & \textbf{MAE (mean $\pm$ SD)} & \textbf{Pseudo-R\textsuperscript{2} (mean $\pm$ SD)} \\
+\midrule
+\multicolumn{5}{l}{\textit{Regression-based models}} \\
+\multirow{2}{*}{LM}  & Train & 0.279 $\pm$ 0.002 & 0.156 $\pm$ 0.001 & 0.230 $\pm$ 0.007 \\
+                     & Test  & 0.345 $\pm$ 0.019 & 0.169 $\pm$ 0.005 & -0.055 $\pm$ 0.120 \\
+\addlinespace
+\multirow{2}{*}{GLM} & Train & 0.272 $\pm$ 0.002 & 0.142 $\pm$ 0.000 & 0.273 $\pm$ 0.010 \\
+                     & Test  & 0.342 $\pm$ 0.013 & 0.159 $\pm$ 0.007 & -0.039 $\pm$ 0.080 \\
+\addlinespace
+\multirow{2}{*}{GAM} & Train & 0.261 $\pm$ 0.002 & 0.137 $\pm$ 0.000 & 0.326 $\pm$ 0.014 \\
+                     & Test  & 0.331 $\pm$ 0.015 & 0.152 $\pm$ 0.003 & \textbf{0.026 $\pm$ 0.091} \\
+\midrule
+\multicolumn{5}{l}{\textit{Tree-based models}} \\
+\multirow{2}{*}{Random Forest} & Train & 0.109 $\pm$ 0.002 & 0.056 $\pm$ 0.001 & 0.878 $\pm$ 0.002 \\
+                                & Test  & 0.320 $\pm$ 0.011 & 0.155 $\pm$ 0.004 & \textbf{0.062 $\pm$ 0.066} \\
+\addlinespace
+\multirow{2}{*}{XGBoost} & Train & 0.210 $\pm$ 0.002 & 0.094 $\pm$ 0.001 & 0.546 $\pm$ 0.014 \\
+                          & Test  & 0.327 $\pm$ 0.011 & 0.134 $\pm$ 0.003 & 0.020 $\pm$ 0.065 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+\section{Appendix}
+
+\begin{longtable}{@{}llccccc@{}}
+\caption{Comparison of prompt variants (simple, detailed, hybrid) across all evaluated models for Level 0 classification (Indoor/Outdoor). The best-performing prompt variant per model, based on Macro F1, is shown in bold.}
+\label{tab:prompt_comparison_level0} \\
+\toprule
+\textbf{Model} & \textbf{Prompt} & \textbf{Dev Accuracy} & \textbf{Macro F1} & \textbf{F1 (Indoor)} & \textbf{F1 (Outdoor)} \\
+\midrule
+\endfirsthead
+
+\multicolumn{5}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Model} & \textbf{Prompt} & \textbf{Dev Accuracy} & \textbf{Macro F1} & \textbf{F1 (Indoor)} & \textbf{F1 (Outdoor)} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\textbf{CLIP-ViT-B32}   & \textbf{simple}   & \textbf{0.8786} & \textbf{0.8768} & \textbf{0.8618} & \textbf{0.8917} \\
+                        & detailed          & 0.8071          & 0.8018          & 0.7692          & 0.8344          \\
+                        & hybrid            & 0.8214          & 0.8155          & 0.7826          & 0.8485          \\
+\addlinespace
+\textbf{CLIP-ViT-L14}   & \textbf{simple}   & \textbf{0.9571} & \textbf{0.9571} & \textbf{0.9552} & \textbf{0.9589} \\
+                        & detailed          & 0.8929          & 0.8924          & 0.8855          & 0.8993          \\
+                        & hybrid            & 0.8429          & 0.8402          & 0.8197          & 0.8608          \\
+\addlinespace
+EVA01-CLIP-g14          & simple            & 0.8857          & 0.8857          & 0.8841          & 0.8873          \\
+\textbf{}               & \textbf{detailed} & \textbf{0.9143} & \textbf{0.9142} & \textbf{0.9118} & \textbf{0.9167} \\
+                        & hybrid            & 0.9000          & 0.8993          & 0.8906          & 0.9079          \\
+\addlinespace
+\textbf{MobileCLIP-S1}  & \textbf{simple}   & \textbf{0.9286} & \textbf{0.9283} & \textbf{0.9242} & \textbf{0.9324} \\
+                        & detailed          & 0.8286          & 0.8242          & 0.7966          & 0.8519          \\
+                        & hybrid            & 0.9000          & 0.8993          & 0.8906          & 0.9079          \\
+
+\end{longtable}
+
+\begin{longtable}{@{}llccccc@{}}
+\caption{Comparison of prompt variants (simple, detailed, mixed) across all evaluated models for Level I classification (Human/Non-Human). The best-performing prompt variant per model, based on Macro F1, is shown in bold.}
+\label{tab:prompt_comparison_level1} \\
+\toprule
+\textbf{Model} & \textbf{Prompt} & \textbf{Dev Accuracy} & \textbf{Macro F1} & \textbf{F1 (Human)} & \textbf{F1 (Non-Human)} \\
+\midrule
+\endfirsthead
+
+\multicolumn{5}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Model} & \textbf{Prompt} & \textbf{Dev Accuracy} & \textbf{Macro F1} & \textbf{F1 (Human)} & \textbf{F1 (Non-Human)} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+CLIP-ViT-B32            & simple            & 0.6071          & 0.5810          & 0.4762          & 0.6857          \\
+                        & detailed          & 0.7214          & 0.7203          & 0.7023          & 0.7383          \\
+\textbf{}               & \textbf{mixed}    & \textbf{0.7786} & \textbf{0.7672} & \textbf{0.7156} & \textbf{0.8187} \\
+\addlinespace
+CLIP-ViT-L14            & simple            & 0.6286          & 0.5990          & 0.4902          & 0.7079          \\
+\textbf{}               & \textbf{detailed} & \textbf{0.7857} & \textbf{0.7853} & \textbf{0.7761} & \textbf{0.7945} \\
+                        & mixed             & 0.7143          & 0.7114          & 0.6825          & 0.7403          \\
+\addlinespace
+EVA01-CLIP-g14          & simple            & 0.6929          & 0.6827          & 0.6261          & 0.7394          \\
+\textbf{}               & \textbf{detailed} & \textbf{0.8714} & \textbf{0.8710} & \textbf{0.8784} & \textbf{0.8636} \\
+                        & mixed             & 0.7000          & 0.6909          & 0.6379          & 0.7439          \\
+\addlinespace
+\textbf{MobileCLIP-S1}  & simple            & 0.6929          & 0.6724          & 0.5905          & 0.7543          \\
+\textbf{}               & \textbf{detailed} & \textbf{0.9286} & \textbf{0.9284} & \textbf{0.9315} & \textbf{0.9254} \\
+                        & mixed             & 0.8143          & 0.8139          & 0.8219          & 0.8060          \\
+
+\end{longtable}
+
+\begin{longtable}{@{}llcccccc@{}}
+\caption{Comparison of prompt variants (simple, detailed, mixed) across all evaluated models for Level II classification (Landscape / Community-Ecosystem / Individual). The best-performing prompt variant per model, based on Macro F1, is shown in bold.}
+\label{tab:prompt_comparison_level2} \\
+\toprule
+\textbf{Model} & \textbf{Prompt} & \textbf{Dev Acc.} & \textbf{Macro F1} & \textbf{F1 (Individual)} & \textbf{F1 (Comm.-Ecosys.)} & \textbf{F1 (Landscape)} \\
+\midrule
+\endfirsthead
+
+\multicolumn{6}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Model} & \textbf{Prompt} & \textbf{Dev Acc.} & \textbf{Macro F1} & \textbf{F1 (Individual)} & \textbf{F1 (Comm.-Ecosys.)} & \textbf{F1 (Landscape)} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{6}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+CLIP-ViT-B32            & simple            & 0.7333          & 0.6911          & 0.8571          & 0.4255          & 0.7907          \\
+\textbf{}               & \textbf{detailed} & \textbf{0.7429} & \textbf{0.7393} & \textbf{0.8333} & \textbf{0.5938} & \textbf{0.7907} \\
+                        & mixed             & 0.7333          & 0.7023          & 0.8267          & 0.4706          & 0.8095          \\
+\addlinespace
+CLIP-ViT-L14            & simple            & 0.6857          & 0.6200          & 0.7901          & 0.2791          & 0.7907          \\
+                        & detailed          & 0.5810          & 0.5874          & 0.6400          & 0.5684          & 0.5538          \\
+\textbf{}               & \textbf{mixed}    & \textbf{0.6952} & \textbf{0.6973} & \textbf{0.9275} & \textbf{0.5556} & \textbf{0.6087} \\
+\addlinespace
+EVA01-CLIP-g14          & simple            & 0.6762          & 0.6315          & 0.7273          & 0.3404          & 0.8267          \\
+\textbf{}               & \textbf{detailed} & \textbf{0.7429} & \textbf{0.7402} & \textbf{0.8493} & \textbf{0.6176} & \textbf{0.7536} \\
+                        & mixed             & 0.6762          & 0.6742          & 0.8158          & 0.5641          & 0.6429          \\
+\addlinespace
+\textbf{MobileCLIP-S1}  & simple            & 0.6857          & 0.6442          & 0.7805          & 0.3673          & 0.7848          \\
+                        & detailed          & 0.7714          & 0.7563          & 0.8857          & 0.5926          & 0.7907          \\
+\textbf{}               & \textbf{mixed}    & \textbf{0.7905} & \textbf{0.7867} & \textbf{0.8986} & \textbf{0.6562} & \textbf{0.8052} \\
+
+\end{longtable}
+
+\begin{table}[htbp]
+\centering
+\caption{The six images on which Annotator 1 and Annotator 2 initially disagreed during gold-standard creation (Indoor/Outdoor), showing the reconciled gold-standard label and how each model classified the same images.}
+\label{tab:reconciled_disagreements_indooroutdoor}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\textbf{Filename} & \textbf{Annot. 1} & \textbf{Annot. 2} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{MobileCLIP} \\
+\midrule
+image\_198.jpg  & outdoor & indoor  & outdoor & outdoor & outdoor & outdoor & outdoor \\
+image\_2516.jpg & indoor  & outdoor & indoor  & outdoor & outdoor & outdoor & outdoor \\
+image\_3220.jpg & indoor  & outdoor & indoor  & outdoor & outdoor & outdoor & outdoor \\
+image\_3385.jpg & indoor  & outdoor & outdoor & outdoor & outdoor & outdoor & outdoor \\
+image\_3993.jpg & indoor  & outdoor & indoor  & indoor  & outdoor & indoor  & indoor  \\
+image\_8876.jpg & indoor  & outdoor & indoor  & indoor  & indoor  & indoor  & indoor  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{longtable}{@{}lccccc@{}}
+\caption{All images on which at least one model disagreed with the gold standard (Indoor/Outdoor), showing the gold-standard label and each model's prediction where it differed. A dash (--) indicates agreement with the gold standard.}
+\label{tab:combined_disagreements_indooroutdoor} \\
+\toprule
+\textbf{Filename} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{MobileCLIP} \\
+\midrule
+\endfirsthead
+
+\multicolumn{6}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Filename} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{MobileCLIP} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{6}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+image\_10779.jpg & indoor  & --      & outdoor & outdoor & --      \\
+image\_1152.jpg  & outdoor & --      & --      & indoor  & --      \\
+image\_143.jpg   & indoor  & outdoor & --      & --      & --      \\
+image\_1824.jpg  & outdoor & --      & --      & indoor  & --      \\
+image\_2485.jpg  & outdoor & --      & --      & indoor  & --      \\
+image\_2516.jpg  & indoor  & outdoor & outdoor & outdoor & outdoor \\
+image\_279.jpg   & indoor  & outdoor & --      & --      & --      \\
+image\_2850.jpg  & indoor  & outdoor & outdoor & outdoor & --      \\
+image\_2870.jpg  & indoor  & --      & outdoor & outdoor & outdoor \\
+image\_3220.jpg  & indoor  & outdoor & outdoor & outdoor & outdoor \\
+image\_3333.jpg  & outdoor & --      & indoor  & indoor  & --      \\
+image\_3654.jpg  & outdoor & --      & --      & indoor  & --      \\
+image\_3993.jpg  & indoor  & --      & outdoor & --      & --      \\
+image\_4155.jpg  & outdoor & --      & indoor  & --      & --      \\
+image\_4356.jpg  & outdoor & --      & --      & indoor  & --      \\
+image\_44.jpg    & outdoor & --      & indoor  & --      & --      \\
+image\_6799.jpg  & indoor  & outdoor & outdoor & outdoor & --      \\
+image\_7987.jpg  & outdoor & --      & indoor  & --      & --      \\
+image\_8301.jpg  & indoor  & outdoor & outdoor & outdoor & outdoor \\
+image\_9365.jpg  & indoor  & outdoor & --      & outdoor & --      \\
+
+\end{longtable}
+
+\begin{longtable}{@{}lccccccc@{}}
+\caption{The 30 images on which Annotator 1 and Annotator 2 initially disagreed during gold-standard creation (Human/Non-Human), showing the reconciled gold-standard label and how each model classified the same images.}
+\label{tab:reconciled_disagreements_humannonhuman} \\
+\toprule
+\textbf{Filename} & \textbf{Annot. 1} & \textbf{Annot. 2} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{MobileCLIP} \\
+\midrule
+\endfirsthead
+
+\multicolumn{8}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Filename} & \textbf{Annot. 1} & \textbf{Annot. 2} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{MobileCLIP} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{8}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+image\_11069.jpg & human     & non\_human & human     & non\_human & human     & human     & human     \\
+image\_11121.jpg & human     & non\_human & non\_human & non\_human & non\_human & non\_human & non\_human \\
+image\_11418.jpg & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_11895.jpg & human     & non\_human & human     & non\_human & non\_human & human     & non\_human \\
+image\_1409.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_1551.jpg  & human     & non\_human & non\_human & non\_human & non\_human & non\_human & non\_human \\
+image\_2022.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_3041.jpg  & human     & non\_human & human     & non\_human & human     & human     & human     \\
+image\_333.jpg   & human     & non\_human & human     & non\_human & human     & human     & human     \\
+image\_3508.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_3910.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_3957.jpg  & non\_human & human     & non\_human & non\_human & non\_human & human     & non\_human \\
+image\_511.jpg   & human     & non\_human & human     & non\_human & human     & human     & human     \\
+image\_651.jpg   & non\_human & human     & non\_human & non\_human & human     & non\_human & non\_human \\
+image\_6781.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_7054.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_7795.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_8116.jpg  & human     & non\_human & human     & non\_human & human     & human     & human     \\
+image\_8241.jpg  & human     & non\_human & non\_human & non\_human & human     & human     & human     \\
+image\_8247.jpg  & human     & non\_human & non\_human & non\_human & non\_human & human     & human     \\
+image\_8841.jpg  & human     & non\_human & human     & non\_human & human     & human     & human     \\
+image\_8856.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_8864.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_8888.jpg  & human     & non\_human & human     & non\_human & non\_human & non\_human & human     \\
+image\_8943.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_9006.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_9316.jpg  & human     & non\_human & human     & human     & non\_human & human     & human     \\
+image\_9457.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_9529.jpg  & human     & non\_human & human     & human     & human     & human     & human     \\
+image\_9592.jpg  & human     & non\_human & human     & non\_human & human     & non\_human & human     \\
+
+\end{longtable}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of model disagreements with the gold standard (Human/Non-Human, $n=298$). The right-hand panel shows how many unique images were misclassified by exactly $k$ of the four models simultaneously.}
+\label{tab:disagreement_summary_humannonhuman}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\multicolumn{2}{c}{\textbf{Disagreements per model}} \\
+\midrule
+CLIP-ViT-B32   & 42 \\
+EVA01-CLIP-g14 & 69 \\
+MobileCLIP-S1  & 74 \\
+CLIP-ViT-L14   & 87 \\
+\midrule
+\multicolumn{2}{c}{\textbf{Images disagreed on by $k$ models simultaneously}} \\
+\midrule
+1 model  & 72 \\
+2 models & 38 \\
+3 models & 36 \\
+4 models & 4 \\
+\midrule
+Total unique disagreement images & 150 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{longtable}{@{}lccccccccc@{}}
+\caption{The 95 images requiring reconciliation among the three annotators (Individual / Community-Ecosystem / Landscape), showing all three annotator labels, the reconciled gold-standard label, and each model's prediction.}
+\label{tab:reconciled_disagreements_indcoecoland} \\
+\toprule
+\textbf{Filename} & \textbf{Ann. 1} & \textbf{Ann. 2} & \textbf{Ann. 3} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{Mobile} \\
+\midrule
+\endfirsthead
+
+\multicolumn{9}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Filename} & \textbf{Ann. 1} & \textbf{Ann. 2} & \textbf{Ann. 3} & \textbf{Gold} & \textbf{ViT-B32} & \textbf{ViT-L14} & \textbf{EVA01} & \textbf{Mobile} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{9}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+image\_10016.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_10076.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_10081.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10165.jpg & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & landscape & landscape & landscape & landscape \\
+image\_10169.jpg & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & landscape & community\_ecosystem & landscape \\
+image\_10172.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10235.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10257.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10397.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10438.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10520.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10607.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10704.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_10772.jpg & landscape & landscape & individual & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_10781.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_11078.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_11157.jpg & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & landscape & community\_ecosystem & landscape \\
+image\_11283.jpg & landscape & landscape & individual & landscape & landscape & landscape & landscape & landscape \\
+image\_11286.jpg & landscape & landscape & individual & landscape & landscape & landscape & landscape & landscape \\
+image\_1129.jpg  & landscape & individual & individual & individual & individual & individual & individual & individual \\
+image\_11414.jpg & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & landscape & landscape & landscape & landscape \\
+image\_11645.jpg & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_11953.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_12033.jpg & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem & landscape \\
+image\_12035.jpg & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem \\
+image\_12107.jpg & landscape & landscape & individual & landscape & landscape & landscape & individual & landscape \\
+image\_12247.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_12281.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_12413.jpg & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & individual & landscape \\
+image\_1260.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_1670.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_1682.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_1724.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_1934.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & landscape & landscape \\
+image\_1975.jpg  & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem & landscape & community\_ecosystem & landscape \\
+image\_1994.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_2016.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_2175.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_2179.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_226.jpg   & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_2282.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem \\
+image\_2333.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_2424.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_2611.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_2717.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & individual & individual & individual & community\_ecosystem \\
+image\_2748.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_283.jpg   & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_2857.jpg  & community\_ecosystem & landscape & individual & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_2900.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_3084.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_3121.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_3281.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_3378.jpg  & landscape & landscape & individual & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_3495.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_3697.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_3787.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_3795.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & individual & landscape \\
+image\_3809.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_3856.jpg  & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_4070.jpg  & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & landscape & landscape & community\_ecosystem & landscape \\
+image\_4226.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_435.jpg   & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_4468.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_4631.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & landscape & landscape \\
+image\_6009.jpg  & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_6707.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_6791.jpg  & individual & individual & community\_ecosystem & individual & individual & individual & individual & individual \\
+image\_6808.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_7000.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem & community\_ecosystem \\
+image\_7809.jpg  & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & landscape & landscape & landscape & landscape \\
+image\_7965.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_7970.jpg  & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & landscape & landscape & landscape & landscape \\
+image\_7995.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_8033.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_8080.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_8280.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_8415.jpg  & landscape & landscape & individual & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_8565.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_8644.jpg  & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & landscape \\
+image\_8768.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_8815.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & individual & landscape \\
+image\_9028.jpg  & individual & individual & community\_ecosystem & individual & individual & landscape & individual & individual \\
+image\_9085.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9119.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem \\
+image\_9197.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9199.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9216.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9281.jpg  & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & landscape & community\_ecosystem & landscape \\
+image\_9614.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & community\_ecosystem & community\_ecosystem & landscape \\
+image\_9628.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9654.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9675.jpg  & landscape & landscape & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem & community\_ecosystem & landscape \\
+image\_9773.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & community\_ecosystem & landscape \\
+image\_9882.jpg  & landscape & landscape & community\_ecosystem & landscape & landscape & landscape & landscape & landscape \\
+image\_9986.jpg  & community\_ecosystem & community\_ecosystem & individual & community\_ecosystem & community\_ecosystem & landscape & community\_ecosystem & community\_ecosystem \\
+
+\end{longtable}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of model disagreements with the gold standard (Individual / Community-Ecosystem / Landscape, $n=297$). The right-hand panel shows how many unique images were misclassified by exactly $k$ of the four models simultaneously.}
+\label{tab:disagreement_summary_indcoecoland}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\multicolumn{2}{c}{\textbf{Disagreements per model}} \\
+\midrule
+MobileCLIP-S1  & 43 \\
+CLIP-ViT-B32   & 47 \\
+CLIP-ViT-L14   & 67 \\
+EVA01-CLIP-g14 & 105 \\
+\midrule
+\multicolumn{2}{c}{\textbf{Images disagreed on by $k$ models simultaneously}} \\
+\midrule
+1 model  & 65 \\
+2 models & 35 \\
+3 models & 13 \\
+4 models & 22 \\
+\midrule
+Total unique disagreement images & 135 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Per-class linear probe performance and error counts for Level I classification (Human/Non-Human). FP (human from non-human) and FN (human to non-human) denote the number of misclassified images in each direction.}
+\label{tab:linearprobe_perclass_humannonhuman}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{Model} & \textbf{Prec.\ (H)} & \textbf{Rec.\ (H)} & \textbf{F1 (H)} & \textbf{Prec.\ (NH)} & \textbf{Rec.\ (NH)} & \textbf{F1 (NH)} & \textbf{FP} & \textbf{FN} \\
+\midrule
+\textbf{CLIP-ViT-L14}  & \textbf{0.857} & \textbf{0.978} & \textbf{0.914} & \textbf{0.990} & \textbf{0.927} & \textbf{0.957} & \textbf{15} & \textbf{2} \\
+CLIP-ViT-B32           & 0.841 & 0.978 & 0.905 & 0.990 & 0.918 & 0.952 & 17 & 2 \\
+EVA01-CLIP-g14         & 0.818 & 0.978 & 0.891 & 0.989 & 0.903 & 0.944 & 20 & 2 \\
+MobileCLIP-S1          & 0.818 & 0.978 & 0.891 & 0.989 & 0.903 & 0.944 & 20 & 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Per-class linear probe F1 scores for Level II classification (Individual / Community-Ecosystem / Landscape).}
+\label{tab:linearprobe_perclass_indcoecoland}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Model} & \textbf{F1 (Individual)} & \textbf{F1 (Comm.-Ecosys.)} & \textbf{F1 (Landscape)} \\
+\midrule
+\textbf{MobileCLIP-S1}  & \textbf{0.842} & 0.693          & \textbf{0.922} \\
+CLIP-ViT-B32            & 0.821          & \textbf{0.698} & 0.913          \\
+EVA01-CLIP-g14          & 0.774          & 0.694          & 0.917          \\
+CLIP-ViT-L14            & 0.786          & 0.667          & 0.913          \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{longtable}{@{}cp{2.2cm}p{2.6cm}p{2.6cm}cp{6.5cm}@{}}
+\caption{Complete collinearity screening elimination history. For each step, the removed variable, the correlated partner variable it was compared against (Spearman steps only), the relevant statistic ($|\rho|$ or VIF), and the reason for removal are shown.}
+\label{tab:screening_full_history} \\
+\toprule
+\textbf{Step} & \textbf{Method} & \textbf{Removed} & \textbf{Partner} & \textbf{Stat.} & \textbf{Reason} \\
+\midrule
+\endfirsthead
+
+\multicolumn{6}{c}{\tablename\ \thetable\ -- continued from previous page} \\
+\toprule
+\textbf{Step} & \textbf{Method} & \textbf{Removed} & \textbf{Partner} & \textbf{Stat.} & \textbf{Reason} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{6}{r}{continued on next page} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+1  & Spearman & visible\_prop\_near & visible\_area\_near\_km2 & 1.000 & Higher mean $|\rho|$ across remaining set (0.311 vs. 0.311) \\
+2  & Spearman & visible\_prop\_middle & visible\_area\_middle\_km2 & 1.000 & Higher mean $|\rho|$ (0.367 vs. 0.367) \\
+3  & Spearman & visible\_area\_km2 & visible\_prop & 1.000 & Higher mean $|\rho|$ (0.358 vs. 0.358) \\
+4  & Spearman & visible\_prop & visible\_area\_middle\_km2 & 0.999 & Higher mean $|\rho|$ (0.339 vs. 0.343) \\
+5  & Spearman & MeanSlope\_deg & ReliefDiversity & 0.991 & Higher mean $|\rho|$ (0.349 vs. 0.344) \\
+6  & Spearman & visible\_anthropogenic & visible\_anthropogenic\_middle & 0.983 & Higher mean $|\rho|$ (0.357 vs. 0.370) \\
+7  & Spearman & ReliefEnergy\_m & ReliefDiversity & 0.973 & Higher mean $|\rho|$ (0.329 vs. 0.322) \\
+8  & Spearman & visible\_water & visible\_water\_middle & 0.957 & Higher mean $|\rho|$ (0.103 vs. 0.135) \\
+9  & Spearman & visible\_naturalness & visible\_naturalness\_middle & 0.950 & Higher mean $|\rho|$ (0.228 vs. 0.296) \\
+10 & Spearman & LAI\_mean & RefugeIndex & 0.923 & Higher mean $|\rho|$ (0.340 vs. 0.328) \\
+11 & Spearman & visible\_diversity\_near & SHDI & 0.905 & Higher mean $|\rho|$ (0.371 vs. 0.341) \\
+12 & Spearman & visible\_diversity & visible\_diversity\_middle & 0.892 & Higher mean $|\rho|$ (0.287 vs. 0.342) \\
+13 & Spearman & SHDI & ContagionIndex & 0.891 & Higher mean $|\rho|$ (0.255 vs. 0.320) \\
+14 & Spearman & visible\_anthropogenic\_near & OpenSpaceProportion & 0.872 & Higher mean $|\rho|$ (0.354 vs. 0.317) \\
+15 & Spearman & RefugeIndex & LAI\_var & 0.854 & Higher mean $|\rho|$ (0.320 vs. 0.334) \\
+16 & Spearman & SkyViewFactor & ReliefDiversity & 0.844 & Higher mean $|\rho|$ (0.343 vs. 0.297) \\
+17 & Spearman & MeanBrightness & visible\_naturalness\_near & 0.836 & Higher mean $|\rho|$ (0.329 vs. 0.279) \\
+18 & Spearman & HemerobyIndex & visible\_naturalness\_near & 0.816 & Higher mean $|\rho|$ (0.261 vs. 0.320) \\
+19 & Spearman & DistanceToSummit\_km & ReliefDiversity & 0.786 & Higher mean $|\rho|$ (0.323 vs. 0.272) \\
+20 & Spearman & NDVI\_mean & LAI\_var & 0.781 & Higher mean $|\rho|$ (0.288 vs. 0.297) \\
+21 & Spearman & OpenSpaceProportion & NumLandElements & 0.779 & Higher mean $|\rho|$ (0.277 vs. 0.264) \\
+22 & Spearman & NumLandElements & ContagionIndex & 0.767 & Higher mean $|\rho|$ (0.213 vs. 0.245) \\
+23 & Spearman & dist\_sd\_m & dist\_sd\_middle\_m & 0.758 & Higher mean $|\rho|$ (0.198 vs. 0.237) \\
+24 & Spearman & visible\_MeanBrightness & visible\_naturalness\_middle & 0.740 & Higher mean $|\rho|$ (0.243 vs. 0.211) \\
+25 & Spearman & visible\_naturalness\_near & NDSI & 0.736 & Higher mean $|\rho|$ (0.216 vs. 0.169) \\
+26 & Spearman & visible\_area\_near\_km2 & dist\_sd\_near\_m & 0.655 & Higher mean $|\rho|$ (0.203 vs. 0.215) \\
+27 & Spearman & visible\_anthropogenic\_middle & visible\_diversity\_middle & 0.650 & Higher mean $|\rho|$ (0.234 vs. 0.290) \\
+28 & Spearman & visible\_naturalness\_middle & visible\_NDSI\_mean & 0.644 & Higher mean $|\rho|$ (0.171 vs. 0.171) \\
+29 & Spearman & DistanceToWater\_km & visible\_water\_near & 0.614 & Higher mean $|\rho|$ (0.158 vs. 0.123) \\
+30 & Spearman & visible\_diversity\_middle & dist\_sd\_middle\_m & 0.608 & Higher mean $|\rho|$ (0.220 vs. 0.178) \\
+31 & VIF & visible\_water\_middle & -- & 27.77 & VIF $\geq 5.0$ (highest among remaining 18 predictors) \\
+
+\end{longtable}
+
+\clearpage
+
+\clearpage
+\bibliographystyle{abbrvnat}
+\bibliography{MT}
+\end{document}
