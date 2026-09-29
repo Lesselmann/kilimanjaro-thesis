@@ -1,0 +1,38 @@
+
+Family: Gamma 
+Link function: log 
+
+Formula:
+avg_annual_PUD ~ s(dist_sd_near_m, bs = "ts", k = 3) + s(visible_area_middle_km2, 
+    bs = "ts", k = 3) + s(ShapeIndex, bs = "ts", k = 3) + s(ForestEcotoneDensity, 
+    bs = "ts", k = 3) + s(ReliefDiversity, bs = "ts", k = 3) + 
+    s(NDSI, bs = "ts", k = 3) + s(NDVI_var, bs = "ts", k = 3) + 
+    s(VerticalStructuralHeterogeneity, bs = "ts", k = 3) + s(ColorDiversity, 
+    bs = "ts", k = 3) + s(ColorDiversity_var, bs = "ts", k = 3) + 
+    s(visible_NDSI_mean, bs = "ts", k = 3) + visible_water_near
+
+Parametric coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        -1.92484    0.06023 -31.959   <2e-16 ***
+visible_water_near -0.24367    1.08683  -0.224    0.823    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                                         edf Ref.df      F  p-value    
+s(dist_sd_near_m)                  2.422e-01      2  0.085 0.391205    
+s(visible_area_middle_km2)         9.549e-01      2  1.764 0.040640 *  
+s(ShapeIndex)                      7.774e-01      2  0.864 0.134356    
+s(ForestEcotoneDensity)            2.705e-05      2  0.000 0.723318    
+s(ReliefDiversity)                 1.860e+00      2 14.900 3.04e-07 ***
+s(NDSI)                            1.498e-04      2  0.000 0.704810    
+s(NDVI_var)                        1.023e+00      2  3.820 0.004475 ** 
+s(VerticalStructuralHeterogeneity) 1.132e+00      2  5.050 0.001254 ** 
+s(ColorDiversity)                  1.047e+00      2  4.849 0.001468 ** 
+s(ColorDiversity_var)              4.080e-05      2  0.000 0.624507    
+s(visible_NDSI_mean)               1.031e+00      2  5.796 0.000473 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.336   Deviance explained = 41.4%
+-REML = -343.8  Scale est. = 1.3225    n = 373

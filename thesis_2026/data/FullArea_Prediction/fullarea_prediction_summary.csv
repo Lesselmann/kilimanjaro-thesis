@@ -1,0 +1,16 @@
+"statistic","value"
+"n_cells_total",10602
+"n_cells_predicted",10555
+"n_cells_not_predicted",47
+"min",0.0177
+"q01",0.0302
+"q25",0.0581
+"median",0.0821
+"mean",0.095
+"q75",0.1137
+"q95",0.1951
+"q99",0.3009
+"max",1.554
+"share_below_0.30_percent",98.9673
+"max_cell_id",6098
+"max_dist_to_summit_km",0.632

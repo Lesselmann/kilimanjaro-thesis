@@ -1,0 +1,25 @@
+
+Method: REML   Optimizer: outer newton
+full convergence after 11 iterations.
+Gradient range [-5.390636e-05,3.53071e-05]
+(score -343.7969 & scale 1.322532).
+Hessian positive definite, eigenvalue range [6.944372e-06,224.733].
+Model rank =  24 / 24 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                                         k'      edf k-index p-value    
+s(dist_sd_near_m)                  2.00e+00 2.42e-01    0.99   0.940    
+s(visible_area_middle_km2)         2.00e+00 9.55e-01    0.85   0.040 *  
+s(ShapeIndex)                      2.00e+00 7.77e-01    0.92   0.520    
+s(ForestEcotoneDensity)            2.00e+00 2.70e-05    0.67  <2e-16 ***
+s(ReliefDiversity)                 2.00e+00 1.86e+00    0.91   0.435    
+s(NDSI)                            2.00e+00 1.50e-04    0.86   0.095 .  
+s(NDVI_var)                        2.00e+00 1.02e+00    0.87   0.125    
+s(VerticalStructuralHeterogeneity) 2.00e+00 1.13e+00    0.96   0.745    
+s(ColorDiversity)                  2.00e+00 1.05e+00    0.96   0.800    
+s(ColorDiversity_var)              2.00e+00 4.08e-05    0.83   0.020 *  
+s(visible_NDSI_mean)               2.00e+00 1.03e+00    0.97   0.865    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

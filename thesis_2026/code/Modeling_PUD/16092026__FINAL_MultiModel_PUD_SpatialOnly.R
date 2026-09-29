@@ -31,9 +31,9 @@ set.seed(42)
 # 0. PATHS
 # ---------------------------------------------------------------
 pud_grid_gpkg        <- "C:/Users/Lukas/masterthesis/thesis_2026/data/PUD_Analysis/pud_grid_aesthetic.gpkg"
-master_csv_screening <- "C:/Users/Lukas/masterthesis/thesis_2026/data/landscape_indicators/master_indicator_table_SCREENING_ONLY_4.csv"
-final_predictors_csv <- "C:/Users/Lukas/masterthesis/thesis_2026/data/screening/results/screening_final_predictors.csv"
-out_dir              <- "C:/Users/Lukas/masterthesis/thesis_2026/data/screening/results/"
+master_csv_screening <- "C:/Users/Lukas/downloads/09092026_master_indicator_table_SCREENING_final_V.csv"
+final_predictors_csv <- "C:/Users/Lukas/downloads/screening_2/results/screening_final_predictors.csv"
+out_dir              <- "C:/Users/Lukas/downloads/screening_2/results/"
 
 id_col       <- "cell_id"
 response_var <- "avg_annual_PUD"
@@ -255,3 +255,90 @@ gap_df <- summary_df %>%
 cat("\n\n############## OVERFITTING GAP (Train R2 - Test R2) ##############\n")
 print(as.data.frame(gap_df), row.names = FALSE)
 write.csv(gap_df, paste0(out_dir, "PUD_spatialCV_overfitting_gap.csv"), row.names = FALSE)
+
+# ---------------------------------------------------------------
+# 8. FIT AND SAVE THE FINAL MODEL ON ALL 373 CELLS
+#    (this was MISSING before -- needed for full-area prediction,
+#    script 21). Only GAM is saved here, since it was selected as
+#    the final reported model (see thesis discussion: non-linear
+#    relationships + smaller train-test gap than tree-based models).
+#    If you also need LM/GLM/RF/XGBoost saved, add analogous blocks.
+# ---------------------------------------------------------------
+cat("\n\n############## FITTING FINAL GAM ON ALL 373 CELLS ##############\n")
+
+gam_final <- gam(as.formula(paste(response_var, "~", paste0("s(", pud_gam[pud_gam != "visible_water_near"], ", bs='ts', k=", gam_k, ")", collapse = " + "),
+                                    "+ visible_water_near")),
+                  data = data_pud_gam, family = Gamma(link = "log"), method = "REML", select = TRUE)
+
+cat("Final GAM formula:\n")
+print(formula(gam_final))
+
+final_model_path <- paste0(out_dir, "FINAL_model_GAM.rds")
+saveRDS(gam_final, final_model_path)
+cat(sprintf("\nSaved: %s\n", final_model_path))
+
+cat("\nThis is the model used for full-area prediction (script 21).\n")
+cat("It was fit on ALL 373 training cells (not a CV fold), using the\n")
+cat("same formula, family, and hyperparameters (k=3) as validated above.\n")
+
+# ---------------------------------------------------------------
+# 9. SAVE DIAGNOSTIC OUTPUTS (convergence, k-index, smooth curves)
+#    -- for reporting in the thesis prediction-quality section
+# ---------------------------------------------------------------
+cat("\n\n############## SAVING DIAGNOSTIC OUTPUTS ##############\n")
+
+# 9a. gam.check() text output (convergence + k-index table) -> .txt
+gamcheck_txt <- paste0(out_dir, "FINAL_GAM_gamcheck_output.txt")
+sink(gamcheck_txt)
+gam.check(gam_final)
+sink()
+cat(sprintf("Saved: %s\n", gamcheck_txt))
+
+# 9b. gam.check() diagnostic plots (QQ, residuals vs linear predictor,
+#     histogram of residuals, response vs fitted) -> .png
+#     par(mfrow=c(2,2)) is set EXPLICITLY before the call, since
+#     relying on gam.check()'s internal layout can sometimes result
+#     in only the last panel being rendered inside a png() device.
+gamcheck_png <- paste0(out_dir, "FINAL_GAM_gamcheck_plots.png")
+png(gamcheck_png, width = 1000, height = 1000)
+par(mfrow = c(2, 2))
+gam.check(gam_final)
+par(mfrow = c(1, 1))
+dev.off()
+cat(sprintf("Saved: %s (4 panels: QQ plot, residuals vs. linear predictor, histogram, response vs. fitted)\n", gamcheck_png))
+
+# 9c. Smooth term (partial effect) curves for all 12 predictors -> .png
+smooth_curves_png <- paste0(out_dir, "FINAL_GAM_smooth_curves.png")
+png(smooth_curves_png, width = 1400, height = 1000)
+plot(gam_final, pages = 1, shade = TRUE, seWithMean = TRUE)
+dev.off()
+cat(sprintf("Saved: %s\n", smooth_curves_png))
+
+cat("\nAll diagnostic outputs saved -- ready to reference/include as\n")
+cat("figures in the prediction-quality section of the thesis.\n")
+
+# 9d. Model summary (coefficient table, edf, deviance explained) -> .txt
+summary_txt <- paste0(out_dir, "FINAL_GAM_summary.txt")
+sink(summary_txt)
+print(summary(gam_final))
+sink()
+cat(sprintf("Saved: %s\n", summary_txt))
+
+# 9e. Concurvity check -- the GAM equivalent of VIF/multicollinearity
+#     for smooth terms. Even after the collinearity screening
+#     (Spearman + VIF, script 01), smooth terms can still show
+#     concurvity that linear correlation alone would not detect,
+#     since concurvity captures non-linear dependencies between
+#     predictors as well.
+concurvity_txt <- paste0(out_dir, "FINAL_GAM_concurvity.txt")
+sink(concurvity_txt)
+cat("=== Worst-case concurvity (upper bound estimate) ===\n")
+print(concurvity(gam_final, full = TRUE))
+cat("\n=== Pairwise concurvity (which predictor pairs, specifically) ===\n")
+print(concurvity(gam_final, full = FALSE))
+sink()
+cat(sprintf("Saved: %s\n", concurvity_txt))
+cat("\nInterpretation: values range 0 (no concurvity) to 1 (full\n")
+cat("concurvity, i.e. one term's fit could be fully replicated by\n")
+cat("the others). Values above ~0.8 are typically considered\n")
+cat("concerning; the 'worst' row/statistic is the most conservative.\n")
